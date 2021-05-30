@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -27,6 +27,10 @@
 		77668FAC2664123C007C6F25 /* ContactContainer.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 77668FAA2664123C007C6F25 /* ContactContainer.xcdatamodeld */; };
 		77668FB026641346007C6F25 /* ContactEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77668FAE26641346007C6F25 /* ContactEntity+CoreDataClass.swift */; };
 		77668FB126641346007C6F25 /* ContactEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77668FAF26641346007C6F25 /* ContactEntity+CoreDataProperties.swift */; };
+		77668FBB266415B5007C6F25 /* UIImage+Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77668FBA266415B5007C6F25 /* UIImage+Data.swift */; };
+		77668FBE266415E8007C6F25 /* UIColor+CustomUIColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77668FBD266415E8007C6F25 /* UIColor+CustomUIColors.swift */; };
+		77668FC126641601007C6F25 /* UIFont+CustomUIFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77668FC026641601007C6F25 /* UIFont+CustomUIFonts.swift */; };
+		77668FC426641675007C6F25 /* Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77668FC326641675007C6F25 /* Images.swift */; };
 		A81F05EF69F45FCBCEC3AAC5 /* Pods_PhoneBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 163E50137BE2FFBBEEF024EB /* Pods_PhoneBook.framework */; };
 /* End PBXBuildFile section */
 
@@ -55,6 +59,10 @@
 		77668FAB2664123C007C6F25 /* ContactContainer.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ContactContainer.xcdatamodel; sourceTree = "<group>"; };
 		77668FAE26641346007C6F25 /* ContactEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContactEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
 		77668FAF26641346007C6F25 /* ContactEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContactEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		77668FBA266415B5007C6F25 /* UIImage+Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Data.swift"; sourceTree = "<group>"; };
+		77668FBD266415E8007C6F25 /* UIColor+CustomUIColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+CustomUIColors.swift"; sourceTree = "<group>"; };
+		77668FC026641601007C6F25 /* UIFont+CustomUIFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+CustomUIFonts.swift"; sourceTree = "<group>"; };
+		77668FC326641675007C6F25 /* Images.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Images.swift; sourceTree = "<group>"; };
 		CE99453788F17305A3DDEEB8 /* Pods-PhoneBook.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PhoneBook.debug.xcconfig"; path = "Target Support Files/Pods-PhoneBook/Pods-PhoneBook.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -76,7 +84,6 @@
 				CE99453788F17305A3DDEEB8 /* Pods-PhoneBook.debug.xcconfig */,
 				28B94270E298C939FBE33ED6 /* Pods-PhoneBook.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -108,6 +115,10 @@
 				77668FA7266411B2007C6F25 /* CoreDataManager.swift */,
 				77668FAA2664123C007C6F25 /* ContactContainer.xcdatamodeld */,
 				77668FA426641139007C6F25 /* ImageStorage.swift */,
+				77668FC326641675007C6F25 /* Images.swift */,
+				77668FBA266415B5007C6F25 /* UIImage+Data.swift */,
+				77668FBD266415E8007C6F25 /* UIColor+CustomUIColors.swift */,
+				77668FC026641601007C6F25 /* UIFont+CustomUIFonts.swift */,
 				77668FA0266410FC007C6F25 /* ContactData.swift */,
 				77668F8326640F0A007C6F25 /* ContactsList */,
 				77668F8E26640FBB007C6F25 /* ContactDetails */,
@@ -290,8 +301,11 @@
 				77668F9D2664109C007C6F25 /* EditViewModel.swift in Sources */,
 				77668FA526641139007C6F25 /* ImageStorage.swift in Sources */,
 				77668F7A26640DBE007C6F25 /* MainCoordinator.swift in Sources */,
+				77668FC426641675007C6F25 /* Images.swift in Sources */,
 				77668FA8266411B2007C6F25 /* CoreDataManager.swift in Sources */,
+				77668FC126641601007C6F25 /* UIFont+CustomUIFonts.swift in Sources */,
 				77668FAC2664123C007C6F25 /* ContactContainer.xcdatamodeld in Sources */,
+				77668FBB266415B5007C6F25 /* UIImage+Data.swift in Sources */,
 				77668F8126640EF0007C6F25 /* ContactsViewModel.swift in Sources */,
 				77668F8926640F5C007C6F25 /* ContactDetailView.swift in Sources */,
 				77668F9126640FE9007C6F25 /* AddContactViewController.swift in Sources */,
@@ -304,6 +318,7 @@
 				77668F8C26640F82007C6F25 /* ContactDetailsViewModel.swift in Sources */,
 				77668F9926641081007C6F25 /* EditViewController.swift in Sources */,
 				77668FA1266410FC007C6F25 /* ContactData.swift in Sources */,
+				77668FBE266415E8007C6F25 /* UIColor+CustomUIColors.swift in Sources */,
 				77668F6526640CBB007C6F25 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
