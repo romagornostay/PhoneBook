@@ -25,7 +25,7 @@ class AddContactViewController: UIViewController {
     private let textFieldName: UITextField = {
         let textField = UITextField()
         textField.placeholder = "First name"
-        textField.returnKeyType = .done
+        textField.returnKeyType = .next
         textField.becomeFirstResponder()
         textField.backgroundColor = .white
         return textField
@@ -33,8 +33,8 @@ class AddContactViewController: UIViewController {
     private let textFieldLastName: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Last name"
-        textField.returnKeyType = .done
-        textField.becomeFirstResponder()
+        textField.returnKeyType = .next
+        //textField.becomeFirstResponder()
         textField.backgroundColor = .white
         return textField
     }()
@@ -42,6 +42,8 @@ class AddContactViewController: UIViewController {
     private let phoneField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "mobile"
+        textField.keyboardType = .phonePad
+        textField.returnKeyType = .next
         textField.backgroundColor = .white
         return textField
     }()
@@ -55,7 +57,9 @@ class AddContactViewController: UIViewController {
     
     private let ringtoneField: UITextField = {
         let textField = UITextField()
+        textField.placeholder = "Default"
         textField.backgroundColor = .white
+        textField.returnKeyType = .next
         return textField
     }()
     
@@ -68,16 +72,19 @@ class AddContactViewController: UIViewController {
     
     private let notesField: UITextField = {
         let textField = UITextField()
+        textField.placeholder = "Type some notes…"
         textField.backgroundColor = .white
+        textField.returnKeyType = .done
         return textField
     }()
     
-    private let picker: UIPickerView = {
+    private let ringtonePicker: UIPickerView = {
         let picker = UIPickerView()
         picker.backgroundColor = .systemBackground
         return picker
     }()
-    private let toolbar = UIToolbar()
+    
+    private let imagePicker = UIImagePickerController()
     
     private let divider1 = UILabel()
     private let divider2 = UILabel()
@@ -92,11 +99,11 @@ class AddContactViewController: UIViewController {
         let phone = phoneField.text!
         let ringtone = ringtoneField.text ?? "Default"
         let notes = notesField.text ?? "Wake up, Neo…"
-        let contact = ContactData(id: nil, firstName: name, lastName: lastName, phone: phone, ringtone: ringtone, notes: notes, avatar: image.image)
+        let contact = ContactData(id: nil, firstName: name, lastName: lastName, phone: phone, ringtone: ringtone, notes: notes, avatar: avatarView.image)
         return contact
     }()
     
-    private let image: UIImageView = {
+    private let avatarView: UIImageView = {
         let image = UIImageView()
         image.image = UIImage(systemName: "person.crop.circle.fill")
         //image.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
@@ -112,53 +119,91 @@ class AddContactViewController: UIViewController {
         return button
     }()
     
+    private let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneTapped))
+    private let cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelTapped))
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        textFieldName.delegate = self
-        textFieldLastName.delegate = self
-        ringtoneField.delegate = self
+        
         setupNavigationItems()
-        setupPicker()
         setupLayout()
+        setupTextFields()
+        setupRingtonePicker()
+        setupMissKeyboardTapGesture()
         
     }
     
     
     private func setupNavigationItems() {
         title = "New Contact"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneTapped))
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelTapped))
+        navigationItem.rightBarButtonItem = doneButton
+        navigationItem.leftBarButtonItem = cancelButton
     }
     
     @objc
     private func doneTapped() {
-        
         viewModel.addContact(newContact)
-        
+    }
+    
+    @objc
+    private func nextTapped() {
+        print("Next")
     }
     
     @objc
     private func cancelTapped() {
         navigationController?.popViewController(animated: false)
-        print("CANCEL!!!")
     }
     
-    private func setupPicker() {
-        picker.delegate = self
-        picker.dataSource = self
-        ringtoneField.inputView = picker
-        toolbar.barStyle = .default
-        toolbar.sizeToFit()
-        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(toolbarDoneTapped))
-        toolbar.setItems([doneButton], animated: false)
-        ringtoneField.inputAccessoryView = toolbar
+    private func setupTextFields() {
+        textFieldName.delegate = self
+        textFieldLastName.delegate = self
+        phoneField.delegate = self
+        ringtoneField.delegate = self
+        notesField.delegate = self
+        addInputAccessoryForTextFields([phoneField,ringtoneField,notesField])
+    }
+    
+    func addInputAccessoryForTextFields(_ textFields: [UITextField]) {
+        for (index, textField) in textFields.enumerated() {
+            let toolbar: UIToolbar = UIToolbar()
+            toolbar.sizeToFit()
+            var items = [UIBarButtonItem]()
+            let nextButton = UIBarButtonItem(title: "Next", style: .plain, target: nil, action: nil)
+            if textField == textFields.last {
+                nextButton.isEnabled = false
+            } else {
+                nextButton.target = textFields[index + 1]
+                nextButton.action = #selector(UITextField.becomeFirstResponder)
+            }
+            items.append(contentsOf: [nextButton])
+            
+            let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+            let doneBut = UIBarButtonItem(title: "Done", style: .plain, target: view, action: #selector(UIView.endEditing))
+            items.append(contentsOf: [spacer, doneBut])
+            
+            toolbar.setItems(items, animated: false)
+            textField.inputAccessoryView = toolbar
+        }
+    }
+    
+    
+    private func setupRingtonePicker() {
+        ringtonePicker.delegate = self
+        ringtonePicker.dataSource = self
+        ringtoneField.inputView = ringtonePicker
+    }
+    
+    private func setupMissKeyboardTapGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(missTapped))
+        view.addGestureRecognizer(tapGesture)
     }
     
     @objc
-    private func toolbarDoneTapped() {
-        self.resignFirstResponder()
+    private func missTapped() {
+        view.endEditing(true)
     }
+    
     
     @objc
     private func imageTapped(sender: UIImageView) {
@@ -168,7 +213,7 @@ class AddContactViewController: UIViewController {
         }))
         
         alert.addAction(UIAlertAction(title: "Gallery", style: .default, handler: { _ in
-            self.openGallery()
+            self.openPhotos()
         }))
         
         alert.addAction(UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil))
@@ -181,7 +226,6 @@ class AddContactViewController: UIViewController {
     
     func openCamera() {
         if UIImagePickerController.isSourceTypeAvailable(UIImagePickerController.SourceType.camera) {
-            let imagePicker = UIImagePickerController()
             imagePicker.delegate = self
             imagePicker.sourceType = UIImagePickerController.SourceType.camera
             imagePicker.allowsEditing = false
@@ -193,9 +237,8 @@ class AddContactViewController: UIViewController {
         }
     }
     
-    func openGallery() {
+    func openPhotos() {
         if UIImagePickerController.isSourceTypeAvailable(UIImagePickerController.SourceType.photoLibrary){
-            let imagePicker = UIImagePickerController()
             imagePicker.delegate = self
             imagePicker.allowsEditing = true
             imagePicker.sourceType = UIImagePickerController.SourceType.photoLibrary
@@ -212,14 +255,14 @@ class AddContactViewController: UIViewController {
         view.backgroundColor = .white
         
         
-        view.addSubview(image)
+        view.addSubview(avatarView)
         
-        image.isUserInteractionEnabled = true
+        avatarView.isUserInteractionEnabled = true
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped))
-        image.addGestureRecognizer(tapRecognizer)
+        avatarView.addGestureRecognizer(tapRecognizer)
         
-        image.center = view.center
-        image.snp.makeConstraints { make in
+        avatarView.center = view.center
+        avatarView.snp.makeConstraints { make in
             make.topMargin.equalTo(16)
             make.leading.equalTo(16)
             make.width.height.equalTo(90)
@@ -227,7 +270,7 @@ class AddContactViewController: UIViewController {
         
         view.addSubview(addPhotoButton)
         addPhotoButton.snp.makeConstraints { make in
-            make.top.equalTo(image.snp.bottom).inset(12)
+            make.top.equalTo(avatarView.snp.bottom).inset(8)
             make.leading.equalTo(25)
         }
         addPhotoButton.addTarget(self, action: #selector(imageTapped), for: .touchUpInside)
@@ -237,7 +280,7 @@ class AddContactViewController: UIViewController {
         view.addSubview(textFieldName)
         textFieldName.snp.makeConstraints { make in
             make.topMargin.equalTo(25)
-            make.leading.equalTo(image.snp.trailing).offset(16)
+            make.leading.equalTo(avatarView.snp.trailing).offset(16)
             make.trailing.equalToSuperview()
             make.height.equalTo(22)
         }
@@ -267,7 +310,7 @@ class AddContactViewController: UIViewController {
         
         view.addSubview(phoneField)
         phoneField.snp.makeConstraints { (make) in
-            make.top.equalTo(textFieldLastName.snp.bottom).offset(30)
+            make.top.equalTo(textFieldLastName.snp.bottom).offset(40)
             make.leading.equalTo(20)
             make.trailing.equalToSuperview()
             make.height.equalTo(22)
@@ -327,25 +370,40 @@ class AddContactViewController: UIViewController {
     }
 }
 
-
+//MARK:-- UITextFieldDelegate
 extension AddContactViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        viewModel.addContact(newContact)
-        return true
+        switch textField {
+        case textFieldName:
+            textFieldLastName.becomeFirstResponder()
+        case textFieldLastName:
+            phoneField.becomeFirstResponder()
+        case phoneField:
+            ringtoneField.becomeFirstResponder()
+        case ringtoneField:
+            notesField.becomeFirstResponder()
+        case notesField:
+            notesField.resignFirstResponder()
+        default:
+            textField.resignFirstResponder()
+        }
+        return false
+        
+        //textField.resignFirstResponder()
+        //viewModel.addContact(newContact)
+        //return true
     }
 }
-
+//MARK:-- UIPickerViewDelegate
 extension AddContactViewController: UIPickerViewDelegate {
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return ringtones[row]
     }
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         ringtoneField.text = ringtones[row]
-        ringtoneField.resignFirstResponder()
     }
 }
-
+//MARK:-- UIPickerViewDataSource
 extension AddContactViewController: UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         1
@@ -360,8 +418,8 @@ extension AddContactViewController: UIPickerViewDataSource {
 extension AddContactViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let pickedImage = info[.originalImage] as? UIImage {
-            image.image = pickedImage
-            image.layer.masksToBounds = true
+            avatarView.image = pickedImage
+            avatarView.layer.masksToBounds = true
             
         }
         picker.dismiss(animated: true, completion: nil)

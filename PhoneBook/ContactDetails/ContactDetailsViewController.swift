@@ -57,7 +57,7 @@ class ContactDetailsViewController: UIViewController {
     private func setupLayout() {
         let currentContact = viewModel.contact
         image.image = currentContact.avatar
-        nameLabel.text = currentContact.firstName + " " + currentContact.lastName
+        nameLabel.text = currentContact.firstName! + " " + currentContact.lastName!
         phoneView.configure(title: "Phone", description: currentContact.phone)
         ringtoneView.configure(title: "Ringtone", description: currentContact.ringtone)
         notesView.configure(title: "Notes", description: currentContact.notes)

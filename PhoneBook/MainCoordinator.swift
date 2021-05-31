@@ -43,7 +43,7 @@ extension MainCoordinator: EditViewModelDelegate {
     func saveContact(_ contact: ContactData) {
         contactsViewModel.updateContact(contact)
         navigationController.popViewController(animated: false)
-        contactsViewModel.obtainContacts()
+        contactsViewModel.obtainContactsList()
     }
     
     func deleteContact(_ contact: ContactData) {

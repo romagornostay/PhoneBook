@@ -108,18 +108,18 @@
 		77668F6126640CBB007C6F25 /* PhoneBook */ = {
 			isa = PBXGroup;
 			children = (
-				77668FB4266413C8007C6F25 /* CoreDataEntitys */,
-				77668F6226640CBB007C6F25 /* AppDelegate.swift */,
-				77668F6426640CBB007C6F25 /* SceneDelegate.swift */,
-				77668F7926640DBE007C6F25 /* MainCoordinator.swift */,
+				77668FB4266413C8007C6F25 /* CoreDataEntities */,
+				77668FA426641139007C6F25 /* ImageStorage.swift */,
 				77668FA7266411B2007C6F25 /* CoreDataManager.swift */,
 				77668FAA2664123C007C6F25 /* ContactContainer.xcdatamodeld */,
-				77668FA426641139007C6F25 /* ImageStorage.swift */,
+				77668F6226640CBB007C6F25 /* AppDelegate.swift */,
+				77668F6426640CBB007C6F25 /* SceneDelegate.swift */,
 				77668FC326641675007C6F25 /* Images.swift */,
 				77668FBA266415B5007C6F25 /* UIImage+Data.swift */,
 				77668FBD266415E8007C6F25 /* UIColor+CustomUIColors.swift */,
 				77668FC026641601007C6F25 /* UIFont+CustomUIFonts.swift */,
 				77668FA0266410FC007C6F25 /* ContactData.swift */,
+				77668F7926640DBE007C6F25 /* MainCoordinator.swift */,
 				77668F8326640F0A007C6F25 /* ContactsList */,
 				77668F8E26640FBB007C6F25 /* ContactDetails */,
 				77668F972664104F007C6F25 /* AddContact */,
@@ -168,13 +168,13 @@
 			path = EditContact;
 			sourceTree = "<group>";
 		};
-		77668FB4266413C8007C6F25 /* CoreDataEntitys */ = {
+		77668FB4266413C8007C6F25 /* CoreDataEntities */ = {
 			isa = PBXGroup;
 			children = (
 				77668FAE26641346007C6F25 /* ContactEntity+CoreDataClass.swift */,
 				77668FAF26641346007C6F25 /* ContactEntity+CoreDataProperties.swift */,
 			);
-			path = CoreDataEntitys;
+			path = CoreDataEntities;
 			sourceTree = "<group>";
 		};
 		9BE9D6CBC5C0D23F7D5BCF9F /* Frameworks */ = {
