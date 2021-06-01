@@ -54,13 +54,13 @@ class ContactDetailView: UIView {
         descriptionLabel.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(2)
             make.leading.equalTo(titleLabel)
+            make.bottom.equalToSuperview()
         }
         addSubview(divider)
         divider.snp.makeConstraints { make in
             make.height.equalTo(3)
             make.top.equalTo(descriptionLabel.snp.bottom).offset(2)
             make.leading.trailing.equalToSuperview()
-            make.bottom.equalToSuperview()
         }
     }
 }

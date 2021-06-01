@@ -31,7 +31,7 @@ class MainCoordinator: Coordinator {
     }
 }
 
-
+// MARK: AddContactViewModelDelegate
 extension MainCoordinator: AddContactViewModelDelegate {
     func addNewContact(_ contact: ContactData) {
         contactsViewModel.addContact(contact)
@@ -39,10 +39,11 @@ extension MainCoordinator: AddContactViewModelDelegate {
     }
 }
 
+// MARK: EditViewModelDelegate
 extension MainCoordinator: EditViewModelDelegate {
     func saveContact(_ contact: ContactData) {
         contactsViewModel.updateContact(contact)
-        navigationController.popViewController(animated: false)
+        navigationController.popToRootViewController(animated: true)
         contactsViewModel.obtainContactsList()
     }
     
@@ -52,7 +53,7 @@ extension MainCoordinator: EditViewModelDelegate {
     }
 }
 
-
+// MARK: ContactsViewModelDelegate
 extension MainCoordinator: ContactsViewModelDelegate {
     func showContactDetails(_ contact: ContactData) {
         let viewModel = ContactDetailsViewModel(with: contact)
@@ -71,7 +72,7 @@ extension MainCoordinator: ContactsViewModelDelegate {
     }
 }
 
-
+// MARK: ContactDetailsViewModelDelegate
 extension MainCoordinator: ContactDetailsViewModelDelegate {
     func editContact(_ contact: ContactData) {
         let viewModel = EditViewModel(with: contact)

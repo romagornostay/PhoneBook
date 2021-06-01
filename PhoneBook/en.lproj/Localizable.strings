@@ -1,0 +1,27 @@
+/* 
+  Localizable.strings
+  PhoneBook
+
+  Created by SalemMacPro on 1.6.21.
+  
+*/
+
+
+"CONTACTS.TITLE" = "Contacts";
+
+"PHONE.TITLE" = "Phone";
+"RINGTONE.TITLE" = "Ringtone";
+"NOTES.TITLE" = "Notes";
+
+"FIRST.NAME" = "First name";
+"LAST.NAME" = "Last name";
+"MOBILE.PHONE" = "mobile";
+"RINGTONE" = "Ringtone";
+"DEFAULT" = "Default";
+"NOTES.TITLE" = "Notes";
+"TYPE.SOME.NOTES" = "Type some notes…";
+"ADD.PHOTO.BUTTON" = "Add Photo";
+"NEXT.BUTTON" = "Next";
+"DONE.BUTTON" = "Done";
+"DELETE.BUTTON" = "Delete Contact";
+

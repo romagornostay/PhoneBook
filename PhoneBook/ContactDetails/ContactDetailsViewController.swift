@@ -25,15 +25,13 @@ class ContactDetailsViewController: UIViewController {
     private let ringtoneView = ContactDetailView()
     private let notesView = ContactDetailView()
     
-    private let divider: UILabel = {
-        let divider = UILabel()
-        divider.layer.backgroundColor = UIColor.black.cgColor
-        return divider
-    }()
+    private let divider1 = UILabel()
+    private let divider2 = UILabel()
+    private let divider3 = UILabel()
+       
     
     private let nameLabel: UILabel = {
         let label = UILabel()
-        label.backgroundColor = .base2
         label.textAlignment = .center
         label.font = .base3
         label.layer.masksToBounds = true
@@ -44,8 +42,13 @@ class ContactDetailsViewController: UIViewController {
         let image = UIImageView()
         image.contentMode = .scaleToFill
         image.layer.cornerRadius = 45
-        //image.backgroundColor = .lightGray
         return image
+    }()
+    
+    private let extendedView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .base2
+        return view
     }()
     
     override func viewDidLoad() {
@@ -58,53 +61,79 @@ class ContactDetailsViewController: UIViewController {
         let currentContact = viewModel.contact
         image.image = currentContact.avatar
         nameLabel.text = currentContact.firstName! + " " + currentContact.lastName!
-        phoneView.configure(title: "Phone", description: currentContact.phone)
-        ringtoneView.configure(title: "Ringtone", description: currentContact.ringtone)
-        notesView.configure(title: "Notes", description: currentContact.notes)
+        phoneView.configure(title: LocalizationConstants.ContactDetails.phone, description: currentContact.phone)
+        ringtoneView.configure(title: LocalizationConstants.ContactDetails.ringtone, description: currentContact.ringtone)
+        notesView.configure(title: LocalizationConstants.ContactDetails.notes, description: currentContact.notes)
         
-        view.addSubview(image)
+        view.addSubview(extendedView)
+        extendedView.snp.makeConstraints { make in
+            make.leading.top.trailing.equalToSuperview()
+            make.height.equalTo(250)
+        }
+        
+        extendedView.addSubview(image)
         image.layer.masksToBounds = true
         image.snp.makeConstraints { make in
-            make.topMargin.equalTo(20)
+            make.top.equalTo(100)
             make.width.height.equalTo(90)
             make.centerX.equalToSuperview()
             
         }
         
-        view.addSubview(nameLabel)
+        extendedView.addSubview(nameLabel)
         nameLabel.snp.makeConstraints { make in
-            make.topMargin.equalTo(120)
+            make.top.equalTo(200)
             make.leading.trailing.equalToSuperview()
-            
-        }
-        view.addSubview(divider)
-        divider.snp.makeConstraints { make in
-            make.height.equalTo(1)
-            make.top.equalTo(nameLabel.snp.bottom).offset(1)
-            make.leading.equalTo(16)
-            make.trailing.equalToSuperview()
-
         }
         
         view.addSubview(phoneView)
         phoneView.snp.makeConstraints { make in
-            make.top.equalTo(nameLabel.snp.bottom).offset(3)
+            make.top.equalTo(extendedView.snp.bottom).offset(3)
             make.leading.equalTo(16)
         }
+        
+        view.addSubview(divider1)
+        divider1.layer.backgroundColor = UIColor.base1.cgColor
+        divider1.snp.makeConstraints { make in
+            make.height.equalTo(1)
+            make.top.equalTo(phoneView.snp.bottom).offset(1)
+            make.leading.equalTo(16)
+            make.trailing.equalToSuperview()
+        }
+        
         view.addSubview(ringtoneView)
         ringtoneView.snp.makeConstraints { make in
-            make.top.equalTo(phoneView.snp.bottom).offset(3)
+            make.top.equalTo(phoneView.snp.bottom).offset(10)
             make.leading.equalTo(phoneView)
         }
+        
+        view.addSubview(divider2)
+        divider2.layer.backgroundColor = UIColor.base1.cgColor
+        divider2.snp.makeConstraints { make in
+            make.height.equalTo(1)
+            make.top.equalTo(ringtoneView.snp.bottom).offset(1)
+            make.leading.equalTo(16)
+            make.trailing.equalToSuperview()
+        }
+        
         view.addSubview(notesView)
         notesView.snp.makeConstraints { make in
-            make.top.equalTo(ringtoneView.snp.bottom).offset(3)
+            make.top.equalTo(ringtoneView.snp.bottom).offset(10)
             make.leading.equalTo(ringtoneView)
+        }
+        
+        view.addSubview(divider3)
+        divider3.layer.backgroundColor = UIColor.base1.cgColor
+        divider3.snp.makeConstraints { make in
+            make.height.equalTo(1)
+            make.top.equalTo(notesView.snp.bottom).offset(1)
+            make.leading.equalTo(16)
+            make.trailing.equalToSuperview()
+
         }
     }
     
     private func setupNavigationItems() {
-        title = "Contact Details"
         view.backgroundColor = .white
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editTapped))
     }

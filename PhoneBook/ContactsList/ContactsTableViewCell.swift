@@ -12,18 +12,12 @@ class ContactsTableViewCell: UITableViewCell {
     
     var firstNameLabel: UILabel = {
         let label = UILabel()
-        //label.textAlignment = .center
         label.font = .base2
-        //label.layer.masksToBounds = true
-        //label.adjustsFontSizeToFitWidth = true
         return label
     }()
     var lastNameLabel: UILabel = {
         let label = UILabel()
-       // label.textAlignment = .center
         label.font = .base5
-        //label.layer.masksToBounds = true
-        //label.adjustsFontSizeToFitWidth = true
         return label
     }()
 

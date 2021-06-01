@@ -20,11 +20,7 @@ protocol ContactsViewModelDelegate: AnyObject {
 
 final class ContactsViewModel {
     private let manager = CoreDataManager()
-    
     weak var delegate: ContactsViewModelDelegate?
-    
-    //var savedEntities: [ContactEntity] = []
-    
     var models: [Model] = []
     
     var contactsDict = [String: [ContactData]]()

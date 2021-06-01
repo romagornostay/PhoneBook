@@ -24,7 +24,7 @@ class AddContactViewController: UIViewController {
     
     private let textFieldName: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "First name"
+        textField.placeholder = LocalizationConstants.AddContact.firstName
         textField.returnKeyType = .next
         textField.becomeFirstResponder()
         textField.backgroundColor = .white
@@ -32,7 +32,7 @@ class AddContactViewController: UIViewController {
     }()
     private let textFieldLastName: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "Last name"
+        textField.placeholder = LocalizationConstants.AddContact.lastName
         textField.returnKeyType = .next
         //textField.becomeFirstResponder()
         textField.backgroundColor = .white
@@ -41,7 +41,7 @@ class AddContactViewController: UIViewController {
     
     private let phoneField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "mobile"
+        textField.placeholder = LocalizationConstants.AddContact.mobilePhone
         textField.keyboardType = .phonePad
         textField.returnKeyType = .next
         textField.backgroundColor = .white
@@ -50,14 +50,14 @@ class AddContactViewController: UIViewController {
     
     private let ringtoneLabel: UILabel = {
         var label = UILabel()
-        label.text = "Ringtone"
+        label.text = LocalizationConstants.AddContact.ringtone
         label.font = .base1
         return label
     }()
     
     private let ringtoneField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "Default"
+        textField.placeholder = LocalizationConstants.AddContact.defaultRingtone
         textField.backgroundColor = .white
         textField.returnKeyType = .next
         return textField
@@ -65,14 +65,14 @@ class AddContactViewController: UIViewController {
     
     private let notesLabel: UILabel = {
         var label = UILabel()
-        label.text = "Notes"
+        label.text = LocalizationConstants.AddContact.notes
         label.font = .base1
         return label
     }()
     
     private let notesField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "Type some notes…"
+        textField.placeholder = LocalizationConstants.AddContact.someNotes
         textField.backgroundColor = .white
         textField.returnKeyType = .done
         return textField
@@ -105,8 +105,7 @@ class AddContactViewController: UIViewController {
     
     private let avatarView: UIImageView = {
         let image = UIImageView()
-        image.image = UIImage(systemName: "person.crop.circle.fill")
-        //image.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
+        image.image = Images.userImage
         image.contentMode = .scaleToFill
         image.layer.cornerRadius = 45
         image.backgroundColor = .white
@@ -115,7 +114,7 @@ class AddContactViewController: UIViewController {
     
     private let addPhotoButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Add Photo", for: .normal)
+        button.setTitle(LocalizationConstants.AddContact.addPhotoButton, for: .normal)
         return button
     }()
     
@@ -135,7 +134,6 @@ class AddContactViewController: UIViewController {
     
     
     private func setupNavigationItems() {
-        title = "New Contact"
         navigationItem.rightBarButtonItem = doneButton
         navigationItem.leftBarButtonItem = cancelButton
     }
@@ -143,11 +141,6 @@ class AddContactViewController: UIViewController {
     @objc
     private func doneTapped() {
         viewModel.addContact(newContact)
-    }
-    
-    @objc
-    private func nextTapped() {
-        print("Next")
     }
     
     @objc
@@ -169,7 +162,7 @@ class AddContactViewController: UIViewController {
             let toolbar: UIToolbar = UIToolbar()
             toolbar.sizeToFit()
             var items = [UIBarButtonItem]()
-            let nextButton = UIBarButtonItem(title: "Next", style: .plain, target: nil, action: nil)
+            let nextButton = UIBarButtonItem(title: LocalizationConstants.AddContact.nextButton, style: .plain, target: nil, action: nil)
             if textField == textFields.last {
                 nextButton.isEnabled = false
             } else {
@@ -179,7 +172,7 @@ class AddContactViewController: UIViewController {
             items.append(contentsOf: [nextButton])
             
             let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-            let doneBut = UIBarButtonItem(title: "Done", style: .plain, target: view, action: #selector(UIView.endEditing))
+            let doneBut = UIBarButtonItem(title: LocalizationConstants.AddContact.doneButton, style: .plain, target: view, action: #selector(UIView.endEditing))
             items.append(contentsOf: [spacer, doneBut])
             
             toolbar.setItems(items, animated: false)

@@ -55,8 +55,9 @@ class ContactsViewController: UIViewController {
     }
     
     private func setupNavigationItems() {
-        title = "Contacts"
+        title = LocalizationConstants.Contacts.title
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTapped))
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: LocalizationConstants.Contacts.title, style: .plain, target: self, action: nil)
     }
     
     @objc
@@ -83,11 +84,6 @@ class ContactsViewController: UIViewController {
         viewModel.obtainContactsList()
         tableView.reloadData()
     }
-//    override func viewDidLayoutSubviews() {
-//        super.viewDidLayoutSubviews()
-//        tableView.frame = view.bounds
-//    }
-    
 }
 
 // MARK: UISearchResultsUpdating
@@ -96,10 +92,9 @@ extension ContactsViewController: UISearchResultsUpdating {
     viewModel.updateSearchResults(searchController: searchController)
   }
 }
-
+// MARK: UITableViewDelegate
 extension ContactsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //let selectedContact = viewModel.savedEntities[indexPath.row]
         let character = viewModel.contactsSectionTitles[indexPath.section]
         if let contactValues = viewModel.contactsDict[character] {
             let contact = contactValues[indexPath.row]
@@ -108,7 +103,7 @@ extension ContactsViewController: UITableViewDelegate {
         
     }
 }
-
+// MARK: UITableViewDataSource
 extension ContactsViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return viewModel.contactsSectionTitles.count
@@ -130,14 +125,10 @@ extension ContactsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 16
     }
-    
-//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//      40
-//    }
+
     
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         let headerView = view as! UITableViewHeaderFooterView
-        //headerView.backgroundView?.backgroundColor = UIColor(red: 0.953, green: 0.953, blue: 0.953, alpha: 1)
         headerView.textLabel?.textColor = .black
         headerView.textLabel?.font = .base4
     }
@@ -148,21 +139,17 @@ extension ContactsViewController: UITableViewDataSource {
         guard let contactValues = viewModel.contactsDict[character] else { return 0 }
         
         return contactValues.count
-       //return viewModel.savedEntities.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ContactsTableViewCell", for: indexPath) as! ContactsTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ContactsTableViewCell", for: indexPath) //as! ContactsTableViewCell
         
         let character = viewModel.contactsSectionTitles[indexPath.section]
         if let contactValues = viewModel.contactsDict[character] {
             let contact = contactValues[indexPath.row]
-            cell.set(contact.firstName, contact.lastName)
-            //cell.textLabel?.text = contact.firstName! + " " + (contact.lastName ?? "")
-            //cell.imageView?.image = contact.avatar
+           // cell.set(contact.firstName, contact.lastName)
+            cell.textLabel?.text = contact.firstName! + " " + (contact.lastName ?? "")
         }
-        //let entity = viewModel.savedEntities[indexPath.row]
-        //cell.textLabel?.text = entity.firstName! + " " + (entity.lastName ?? "")
         return cell
     }
 }
