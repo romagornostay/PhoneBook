@@ -35,7 +35,7 @@ class MainCoordinator: Coordinator {
 extension MainCoordinator: AddContactViewModelDelegate {
     func addNewContact(_ contact: ContactData) {
         contactsViewModel.addContact(contact)
-        navigationController.popViewController(animated: false)
+        navigationController.popViewControllerToBottom()
     }
 }
 
@@ -68,7 +68,7 @@ extension MainCoordinator: ContactsViewModelDelegate {
         viewModel.delegate = self
         let viewController = AddContactViewController(viewModel: viewModel)
         viewController.navigationItem.largeTitleDisplayMode = .never
-        navigationController.pushViewControllerFromBottom(viewController)
+        navigationController.moveViewControllerFromBottom(viewController)
         //navigationController.pushViewController(viewController, animated: false)
     }
 }

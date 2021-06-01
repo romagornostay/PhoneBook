@@ -10,14 +10,12 @@ import UIKit
 class ContactDetailView: UIView {
     private let titleLabel: UILabel = {
         var label = UILabel()
-        //label.textColor = .base4
         label.font = .base1
         return label
     }()
     
     private let descriptionLabel: UILabel = {
         var label = UILabel()
-        //label.textColor = .base4
         label.font = .base2
         return label
     }()

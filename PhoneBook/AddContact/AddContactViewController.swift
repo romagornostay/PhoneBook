@@ -145,7 +145,7 @@ class AddContactViewController: UIViewController {
     
     @objc
     private func cancelTapped() {
-        navigationController?.popViewController(animated: false)
+        navigationController?.popViewControllerToBottom()
     }
     
     private func setupTextFields() {

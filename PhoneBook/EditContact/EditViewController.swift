@@ -36,7 +36,6 @@ class EditViewController: UIViewController {
         let textField = UITextField()
         textField.placeholder = LocalizationConstants.EditContact.lastName
         textField.returnKeyType = .next
-        //textField.becomeFirstResponder()
         textField.backgroundColor = .white
         return textField
     }()
