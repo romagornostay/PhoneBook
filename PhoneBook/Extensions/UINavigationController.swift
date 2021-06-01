@@ -20,8 +20,8 @@ extension UINavigationController {
     
     func pushViewControllerFromBottom(_ controller: UIViewController){
         let transition = CATransition()
-        transition.duration = 0.3
-        transition.type = CATransitionType.push
+        transition.duration = 0.4
+        transition.type = CATransitionType.moveIn
         transition.subtype = CATransitionSubtype.fromTop
         transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
         view.window!.layer.add(transition, forKey: kCATransition)
