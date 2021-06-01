@@ -12,8 +12,15 @@ class ContactsViewController: UIViewController {
     
     private let tableView: UITableView = {
         let table = UITableView.init(frame: .zero, style: .grouped)
-        table.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        table.register(UITableViewCell.self, forCellReuseIdentifier: "ContactsTableViewCell")
         return table
+    }()
+    
+    private let searchController: UISearchController = {
+      let searchController = UISearchController()
+      searchController.searchBar.autocapitalizationType = .none
+      searchController.obscuresBackgroundDuringPresentation = false
+      return searchController
     }()
     
     init(viewModel: ContactsViewModel) {
@@ -33,9 +40,18 @@ class ContactsViewController: UIViewController {
         viewModel.createContactsDict()
         setupNavigationItems()
         setupLayout()
-        
+        setupSearchController()
+        binding()
         tableView.delegate = self
         tableView.dataSource = self
+    }
+    
+    private func binding() {
+        viewModel.onDidUpdateData = { [weak self] in
+        DispatchQueue.main.async {
+          self?.tableView.reloadData()
+        }
+      }
     }
     
     private func setupNavigationItems() {
@@ -55,6 +71,13 @@ class ContactsViewController: UIViewController {
         }
     }
     
+    func setupSearchController() {
+      definesPresentationContext = true
+      navigationItem.hidesSearchBarWhenScrolling = false
+      navigationItem.searchController = self.searchController
+      searchController.searchResultsUpdater = self
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewModel.obtainContactsList()
@@ -65,6 +88,13 @@ class ContactsViewController: UIViewController {
 //        tableView.frame = view.bounds
 //    }
     
+}
+
+// MARK: UISearchResultsUpdating
+extension ContactsViewController: UISearchResultsUpdating {
+  func updateSearchResults(for searchController: UISearchController) {
+    viewModel.updateSearchResults(searchController: searchController)
+  }
 }
 
 extension ContactsViewController: UITableViewDelegate {
@@ -101,13 +131,17 @@ extension ContactsViewController: UITableViewDataSource {
         return 16
     }
     
+//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//      40
+//    }
+    
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         let headerView = view as! UITableViewHeaderFooterView
         //headerView.backgroundView?.backgroundColor = UIColor(red: 0.953, green: 0.953, blue: 0.953, alpha: 1)
         headerView.textLabel?.textColor = .black
         headerView.textLabel?.font = .base4
-        
     }
+    
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let character = viewModel.contactsSectionTitles[section]
@@ -118,12 +152,13 @@ extension ContactsViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ContactsTableViewCell", for: indexPath) as! ContactsTableViewCell
         
         let character = viewModel.contactsSectionTitles[indexPath.section]
         if let contactValues = viewModel.contactsDict[character] {
             let contact = contactValues[indexPath.row]
-            cell.textLabel?.text = contact.firstName! + " " + (contact.lastName ?? "")
+            cell.set(contact.firstName, contact.lastName)
+            //cell.textLabel?.text = contact.firstName! + " " + (contact.lastName ?? "")
             //cell.imageView?.image = contact.avatar
         }
         //let entity = viewModel.savedEntities[indexPath.row]

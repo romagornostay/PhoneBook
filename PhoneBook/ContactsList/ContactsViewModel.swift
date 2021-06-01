@@ -29,7 +29,18 @@ final class ContactsViewModel {
     
     var contactsDict = [String: [ContactData]]()
     var contactsSectionTitles = [String]()
+    var onDidUpdateData: (() -> ())?
     
+    func updateSearchResults(searchController: UISearchController) {
+      guard let text = searchController.searchBar.text else { return }
+        print(text)
+        for (key, value) in contactsDict {
+            let contactsList = value.filter({text.isEmpty ? true : "\($0)".contains(text.lowercased())})
+            contactsDict[key] = []
+            contactsDict[key] = contactsList
+        }
+        onDidUpdateData?()
+    }
     
     func showContactDetails(for contact: ContactData) {
         delegate?.showContactDetails(contact)
@@ -53,8 +64,8 @@ final class ContactsViewModel {
     
     func obtainContactsList() {
         manager.fetchUsers()
-        //savedEntities = manager.savedEntities
-        contactsDict = [:]
+        //contactsDict = [:]
+        contactsDict.removeAll()
         createContactsDict()
     }
     

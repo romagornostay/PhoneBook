@@ -24,9 +24,7 @@ final class ImageStorage {
     }
     
     func setImage(_ image: UIImage, forKey key: String) throws {
-        guard let data = image.toData() else {
-            throw Error.invalidImage
-        }
+        guard let data = image.jpegData(compressionQuality: 1.0) else { throw Error.invalidImage }
         let filePath = makeFilePath(for: key)
         _ = fileManager.createFile(atPath: filePath, contents: data, attributes: nil)
     }
@@ -34,14 +32,11 @@ final class ImageStorage {
     func image(forKey key: String) throws -> UIImage {
         let filePath = makeFilePath(for: key)
         let data = try Data(contentsOf: URL(fileURLWithPath: filePath))
-        guard let image = UIImage(data: data) else {
-            throw Error.invalidImage
-        }
+        guard let image = UIImage(data: data) else { throw Error.invalidImage }
         return image
     }
 }
 
-// MARK: - File System Helpers
 private extension ImageStorage {
 
     func setDirectoryAttributes(_ attributes: [FileAttributeKey: Any]) throws {
@@ -58,10 +53,7 @@ private extension ImageStorage {
     }
     
     func createDirectory() throws {
-        guard !fileManager.fileExists(atPath: path) else {
-            return
-        }
-        
+        guard !fileManager.fileExists(atPath: path) else { return }
         try fileManager.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil)
     }
 }
