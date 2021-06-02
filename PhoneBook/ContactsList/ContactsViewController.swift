@@ -12,14 +12,15 @@ class ContactsViewController: UIViewController {
     
     private let tableView: UITableView = {
         let table = UITableView.init(frame: .zero, style: .grouped)
-        table.register(UITableViewCell.self, forCellReuseIdentifier: "ContactsTableViewCell")
+        //table.separatorStyle = .none
+        table.register(ContactsTableViewCell.self, forCellReuseIdentifier: ContactsTableViewCell.identifier)
         return table
     }()
     
     private let searchController: UISearchController = {
       let searchController = UISearchController()
-      searchController.searchBar.autocapitalizationType = .none
-      searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.autocapitalizationType = .words
+      //searchController.obscuresBackgroundDuringPresentation = false
       return searchController
     }()
     
@@ -123,7 +124,7 @@ extension ContactsViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 16
+        return 20
     }
 
     
@@ -142,13 +143,13 @@ extension ContactsViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ContactsTableViewCell", for: indexPath) //as! ContactsTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: ContactsTableViewCell.identifier, for: indexPath) as! ContactsTableViewCell
         
         let character = viewModel.contactsSectionTitles[indexPath.section]
         if let contactValues = viewModel.contactsDict[character] {
             let contact = contactValues[indexPath.row]
-           // cell.set(contact.firstName, contact.lastName)
-            cell.textLabel?.text = contact.firstName! + " " + (contact.lastName ?? "")
+           cell.set(contact.firstName, contact.lastName)
+           // cell.textLabel?.text = contact.firstName! + " " + (contact.lastName ?? "")
         }
         return cell
     }

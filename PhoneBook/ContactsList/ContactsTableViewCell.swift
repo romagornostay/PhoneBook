@@ -10,6 +10,8 @@ import SnapKit
 
 class ContactsTableViewCell: UITableViewCell {
     
+    static var identifier = "ContactsTableViewCell"
+    
     var firstNameLabel: UILabel = {
         let label = UILabel()
         label.font = .base2
@@ -17,7 +19,7 @@ class ContactsTableViewCell: UITableViewCell {
     }()
     var lastNameLabel: UILabel = {
         let label = UILabel()
-        label.font = .base5
+        label.font = .base4
         return label
     }()
 
@@ -39,11 +41,13 @@ class ContactsTableViewCell: UITableViewCell {
     private func setupLayout() {
         addSubview(firstNameLabel)
         firstNameLabel.snp.makeConstraints { make in
-            make.leading.top.equalToSuperview()
+            make.leading.equalTo(16)
+            make.top.equalTo(16)
+            make.bottom.equalTo(-16)
         }
         addSubview(lastNameLabel)
         lastNameLabel.snp.makeConstraints { make in
-            make.leading.equalTo(firstNameLabel.snp.trailing)
+            make.leading.equalTo(firstNameLabel.snp.trailing).inset(-5)
             make.top.bottom.equalToSuperview()
         }
     }

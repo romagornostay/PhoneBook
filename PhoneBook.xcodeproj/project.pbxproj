@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -35,6 +35,8 @@
 		77668FD52665BD4E007C6F25 /* LocalizationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77668FD42665BD4E007C6F25 /* LocalizationConstants.swift */; };
 		77668FD72665BD71007C6F25 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 77668FD92665BD71007C6F25 /* Localizable.strings */; };
 		77668FDC2665EEA3007C6F25 /* UINavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77668FDB2665EEA3007C6F25 /* UINavigationController.swift */; };
+		77668FE126675D9E007C6F25 /* StretchyTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77668FE026675D9D007C6F25 /* StretchyTableHeaderView.swift */; };
+		77668FE62667698C007C6F25 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 77668FE52667698C007C6F25 /* SnapKit */; };
 		A81F05EF69F45FCBCEC3AAC5 /* Pods_PhoneBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 163E50137BE2FFBBEEF024EB /* Pods_PhoneBook.framework */; };
 /* End PBXBuildFile section */
 
@@ -71,6 +73,7 @@
 		77668FD42665BD4E007C6F25 /* LocalizationConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizationConstants.swift; sourceTree = "<group>"; };
 		77668FD82665BD71007C6F25 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		77668FDB2665EEA3007C6F25 /* UINavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UINavigationController.swift; sourceTree = "<group>"; };
+		77668FE026675D9D007C6F25 /* StretchyTableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StretchyTableHeaderView.swift; sourceTree = "<group>"; };
 		CE99453788F17305A3DDEEB8 /* Pods-PhoneBook.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PhoneBook.debug.xcconfig"; path = "Target Support Files/Pods-PhoneBook/Pods-PhoneBook.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -80,6 +83,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A81F05EF69F45FCBCEC3AAC5 /* Pods_PhoneBook.framework in Frameworks */,
+				77668FE62667698C007C6F25 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -153,6 +157,7 @@
 			isa = PBXGroup;
 			children = (
 				77668F8426640F38007C6F25 /* ContactDetailsViewController.swift */,
+				77668FE026675D9D007C6F25 /* StretchyTableHeaderView.swift */,
 				77668F8826640F5C007C6F25 /* ContactDetailView.swift */,
 				77668F8B26640F82007C6F25 /* ContactDetailsViewModel.swift */,
 			);
@@ -231,6 +236,9 @@
 			dependencies = (
 			);
 			name = PhoneBook;
+			packageProductDependencies = (
+				77668FE52667698C007C6F25 /* SnapKit */,
+			);
 			productName = PhoneBook;
 			productReference = 77668F5F26640CBB007C6F25 /* PhoneBook.app */;
 			productType = "com.apple.product-type.application";
@@ -258,6 +266,9 @@
 				Base,
 			);
 			mainGroup = 77668F5626640CBB007C6F25;
+			packageReferences = (
+				77668FE42667698C007C6F25 /* XCRemoteSwiftPackageReference "SnapKit" */,
+			);
 			productRefGroup = 77668F6026640CBB007C6F25 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -331,6 +342,7 @@
 				77668FDC2665EEA3007C6F25 /* UINavigationController.swift in Sources */,
 				77668FA526641139007C6F25 /* ImageStorage.swift in Sources */,
 				77668F7A26640DBE007C6F25 /* MainCoordinator.swift in Sources */,
+				77668FE126675D9E007C6F25 /* StretchyTableHeaderView.swift in Sources */,
 				77668FC426641675007C6F25 /* Images.swift in Sources */,
 				77668FA8266411B2007C6F25 /* CoreDataManager.swift in Sources */,
 				77668FC126641601007C6F25 /* UIFont+CustomUIFonts.swift in Sources */,
@@ -555,6 +567,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		77668FE42667698C007C6F25 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		77668FE52667698C007C6F25 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 77668FE42667698C007C6F25 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		77668FAA2664123C007C6F25 /* ContactContainer.xcdatamodeld */ = {

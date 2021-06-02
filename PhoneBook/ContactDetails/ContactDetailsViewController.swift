@@ -21,6 +21,13 @@ class ContactDetailsViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    private let tableView: UITableView = {
+        let table = UITableView.init(frame: .zero, style: .grouped)
+        //table.separatorStyle = .none
+        table.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        return table
+    }()
+    
     private let phoneView = ContactDetailView()
     private let ringtoneView = ContactDetailView()
     private let notesView = ContactDetailView()
@@ -55,6 +62,11 @@ class ContactDetailsViewController: UIViewController {
         super.viewDidLoad()
         setupLayout()
         setupNavigationItems()
+        //view.addSubview(tableView)
+        tableView.frame = view.bounds
+        tableView.delegate = self
+        tableView.dataSource = self
+        
     }
     
     private func setupLayout() {
@@ -143,5 +155,20 @@ class ContactDetailsViewController: UIViewController {
         let currentContact = viewModel.contact
         viewModel.editContact(currentContact)
     }
+}
+
+extension ContactDetailsViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        3
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) //as! ContactsTableViewCell
+        
+        
+        return cell
+    }
+    
+    
 }
 
