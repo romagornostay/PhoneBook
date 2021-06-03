@@ -57,6 +57,7 @@ class ContactsViewController: UIViewController {
     
     private func setupNavigationItems() {
         title = LocalizationConstants.Contacts.title
+        
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTapped))
         navigationItem.backBarButtonItem = UIBarButtonItem(title: LocalizationConstants.Contacts.title, style: .plain, target: self, action: nil)
     }

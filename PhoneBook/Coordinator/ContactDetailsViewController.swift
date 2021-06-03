@@ -24,7 +24,7 @@ class ContactDetailsViewController: UIViewController {
     private let tableView: UITableView = {
         let table = UITableView.init(frame: .zero, style: .grouped)
         //table.separatorStyle = .none
-        table.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        table.register(ContactDetailTableViewCell.self, forCellReuseIdentifier: ContactDetailTableViewCell.identifier)
         return table
     }()
     
@@ -60,13 +60,24 @@ class ContactDetailsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupLayout()
+        //setupLayout()
         setupNavigationItems()
-        //view.addSubview(tableView)
+        view.addSubview(tableView)
         tableView.frame = view.bounds
         tableView.delegate = self
         tableView.dataSource = self
+        let headerView = StretchyTableHeaderView(frame: CGRect(x: 0, y: 0,
+                                                               width: view.frame.size.width,
+                                                               height: view.frame.size.width/3))
+        let model = viewModel.contact
+        headerView.configure(name: model.firstName, lastName: model.lastName, avatar: model.avatar)
+        //headerView.avatarView.image = viewModel.contact.avatar
+        //headerView.avatarView.frame.size.width = headerView.avatarView.frame.size.height
+        //headerView.avatarView.layer.cornerRadius = headerView.frame.width
+        //headerView.avatarView.layer.masksToBounds = true
         
+        
+        tableView.tableHeaderView = headerView
     }
     
     private func setupLayout() {
@@ -146,6 +157,10 @@ class ContactDetailsViewController: UIViewController {
     }
     
     private func setupNavigationItems() {
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.isTranslucent = true
+        
         view.backgroundColor = .white
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editTapped))
     }
@@ -163,12 +178,29 @@ extension ContactDetailsViewController: UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) //as! ContactsTableViewCell
-        
+        let cell = tableView.dequeueReusableCell(withIdentifier: ContactDetailTableViewCell.identifier, for: indexPath) as! ContactDetailTableViewCell
+        let currentContact = viewModel.contact
+        switch indexPath.row {
+        case 0:
+            cell.configure(title: LocalizationConstants.ContactDetails.phone, description: currentContact.phone, textColor: .base3)
+        case 1:
+            cell.configure(title: LocalizationConstants.ContactDetails.ringtone, description: currentContact.ringtone, textColor: .black)
+        case 2:
+            cell.configure(title: LocalizationConstants.ContactDetails.notes, description: currentContact.notes, textColor: .black)
+        default:
+            break
+        }
         
         return cell
     }
     
     
+}
+
+extension ContactDetailsViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard let header = tableView.tableHeaderView as? StretchyTableHeaderView else {return}
+        header.scrollViewDidScroll(scrollView: tableView)
+    }
 }
 

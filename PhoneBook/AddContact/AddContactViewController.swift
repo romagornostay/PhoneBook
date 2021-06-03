@@ -34,7 +34,6 @@ class AddContactViewController: UIViewController {
         let textField = UITextField()
         textField.placeholder = LocalizationConstants.AddContact.lastName
         textField.returnKeyType = .next
-        //textField.becomeFirstResponder()
         textField.backgroundColor = .white
         return textField
     }()
@@ -42,6 +41,7 @@ class AddContactViewController: UIViewController {
     private let phoneField: UITextField = {
         let textField = UITextField()
         textField.placeholder = LocalizationConstants.AddContact.mobilePhone
+        //textField.textContentType = .telephoneNumber
         textField.keyboardType = .phonePad
         textField.returnKeyType = .next
         textField.backgroundColor = .white
@@ -121,6 +121,7 @@ class AddContactViewController: UIViewController {
     private let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneTapped))
     private let cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelTapped))
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -129,7 +130,6 @@ class AddContactViewController: UIViewController {
         setupTextFields()
         setupRingtonePicker()
         setupMissKeyboardTapGesture()
-        
     }
     
     
@@ -204,17 +204,12 @@ class AddContactViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "Camera", style: .default, handler: { _ in
             self.openCamera()
         }))
-        
         alert.addAction(UIAlertAction(title: "Gallery", style: .default, handler: { _ in
             self.openPhotos()
         }))
-        
         alert.addAction(UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil))
         
         self.present(alert, animated: true, completion: nil)
-        
-        
-        print("Choose image!!!")
     }
     
     func openCamera() {
@@ -267,8 +262,6 @@ class AddContactViewController: UIViewController {
             make.leading.equalTo(25)
         }
         addPhotoButton.addTarget(self, action: #selector(imageTapped), for: .touchUpInside)
-        
-        
         
         view.addSubview(textFieldName)
         textFieldName.snp.makeConstraints { make in
@@ -381,10 +374,6 @@ extension AddContactViewController: UITextFieldDelegate {
             textField.resignFirstResponder()
         }
         return false
-        
-        //textField.resignFirstResponder()
-        //viewModel.addContact(newContact)
-        //return true
     }
 }
 //MARK:-- UIPickerViewDelegate
@@ -413,7 +402,6 @@ extension AddContactViewController: UIImagePickerControllerDelegate, UINavigatio
         if let pickedImage = info[.originalImage] as? UIImage {
             avatarView.image = pickedImage
             avatarView.layer.masksToBounds = true
-            
         }
         picker.dismiss(animated: true, completion: nil)
     }

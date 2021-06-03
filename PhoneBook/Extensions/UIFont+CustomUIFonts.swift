@@ -14,5 +14,4 @@ extension UIFont {
     static let base3 = UIFont.systemFont(ofSize: 30) 
     static let base4 = UIFont.systemFont(ofSize: 17, weight: .semibold)
     static let base5 = UIFont.systemFont(ofSize: 17, weight: .bold)
-
 }
