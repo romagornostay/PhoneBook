@@ -22,18 +22,27 @@ final class ContactsViewModel {
     private let manager = CoreDataManager()
     weak var delegate: ContactsViewModelDelegate?
     var models: [Model] = []
-    
-    var contactsDict = [String: [ContactData]]()
+    //var contactsDict = [String: [ContactData]]()
     var contactsSectionTitles = [String]()
-    var onDidUpdateData: (() -> ())?
+    var onDidUpdateData: (() -> Void)?
     
-    func updateSearchResults(searchController: UISearchController) {
-      guard let text = searchController.searchBar.text else { return }
-        print(text)
-        for (key, value) in contactsDict {
-            let contactsList = value.filter({text.isEmpty ? true : "\($0)".contains(text.lowercased())})
-            contactsDict[key] = []
-            contactsDict[key] = contactsList
+    func updateSearchResults(for searchController: UISearchController) {
+        //print("----SEARCHING...---")
+        guard let text = searchController.searchBar.text else { return }
+        var filteredContacts = [ContactData]()
+        filteredContacts = manager.savedContacts.filter({text.isEmpty ? true : "\($0)".lowercased().contains(text.lowercased())})
+        filteredContacts = filteredContacts.sorted(by: { $0.lastName < $1.lastName })
+        if text.isEmpty {
+            models.removeAll()
+            contactsSectionTitles.removeAll()
+            createModels()
+        } else {
+            models.removeAll()
+            contactsSectionTitles.removeAll()
+            contactsSectionTitles = ["TOP NAME MATCHES"]
+            if let character = contactsSectionTitles.first {
+            models = [Model(character: character, contacts: filteredContacts)]
+            }
         }
         onDidUpdateData?()
     }
@@ -48,54 +57,37 @@ final class ContactsViewModel {
     
     func addContact(_ contact: ContactData) {
         manager.addEntity(with: contact)
+        createModels()
+        onDidUpdateData?()
     }
     
     func updateContact(_ contact: ContactData) {
         manager.updateEntity(with: contact)
+        createModels()
+        onDidUpdateData?()
     }
     
     func deleteContact(_ contact: ContactData) {
         manager.deleteEntity(with: contact)
+        createModels()
+        onDidUpdateData?()
     }
     
-    func obtainContactsList() {
-        manager.fetchUsers()
-        //contactsDict = [:]
-        contactsDict.removeAll()
-        createContactsDict()
-    }
-    
-    func createContactsDict() {
-        for entity in manager.savedEntities {
+    func createModels() {
+        //let arrayOfFirstLetter = manager.savedContacts.map {$0.lastName.first}
+        let set = Set(manager.savedContacts.map {$0.lastName.first})
+        models = set.map { letter -> Model in
             var character = ""
-            let contact = manager.convertEntityToContact(by: entity)
-            if let lastName = contact.lastName , !contact.lastName!.isEmpty {
-                let firstLetterIndex = lastName.index(lastName.startIndex, offsetBy: 1)
-                character = String(lastName[..<firstLetterIndex])
-            }  else if let firstName = contact.firstName, !contact.firstName!.isEmpty {
-                let firstLetterIndex = firstName.index(firstName.startIndex, offsetBy: 1)
-                character = String(firstName[..<firstLetterIndex])
+            if let char = letter {
+                character = String(describing: char)
             }
-            
-            if var contactValues = contactsDict[character] {
-                contactValues.append(contact)
-                contactsDict[character] = contactValues
-            } else {
-                contactsDict[character] = [contact]
-            }
-            for var model in models {
-                if model.character == character {
-                    model.contacts.append(contact)
-                } else {
-                    let newModel = Model(character: character, contacts: [contact])
-                    models.append(newModel)
-                }
-                
-            }
-            
+            let contacts = manager.savedContacts.filter {$0.lastName.first == letter}
+            let model = Model(character: character, contacts: contacts)
+            return model
         }
-        contactsSectionTitles = [String](contactsDict.keys)
+        contactsSectionTitles = [String](models.compactMap { $0.character })
         contactsSectionTitles = contactsSectionTitles.sorted(by: { $0 < $1 })
+        print("---1---\(contactsSectionTitles)")
     }
 }
 

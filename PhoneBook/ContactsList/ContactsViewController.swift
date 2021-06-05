@@ -18,10 +18,10 @@ class ContactsViewController: UIViewController {
     }()
     
     private let searchController: UISearchController = {
-      let searchController = UISearchController()
+        let searchController = UISearchController()
         searchController.searchBar.autocapitalizationType = .words
-      //searchController.obscuresBackgroundDuringPresentation = false
-      return searchController
+        searchController.obscuresBackgroundDuringPresentation = false
+        return searchController
     }()
     
     init(viewModel: ContactsViewModel) {
@@ -38,21 +38,27 @@ class ContactsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewModel.createContactsDict()
+        
         setupNavigationItems()
         setupLayout()
         setupSearchController()
+        
+        
         binding()
+        viewModel.createModels()
+        
         tableView.delegate = self
         tableView.dataSource = self
+        
     }
     
     private func binding() {
         viewModel.onDidUpdateData = { [weak self] in
-        DispatchQueue.main.async {
-          self?.tableView.reloadData()
+            
+           // DispatchQueue.main.async {
+                self?.tableView.reloadData()
+                print("----Binding!!!----")
         }
-      }
     }
     
     private func setupNavigationItems() {
@@ -75,34 +81,35 @@ class ContactsViewController: UIViewController {
     }
     
     func setupSearchController() {
-      definesPresentationContext = true
-      navigationItem.hidesSearchBarWhenScrolling = false
-      navigationItem.searchController = self.searchController
-      searchController.searchResultsUpdater = self
+        definesPresentationContext = true
+        navigationItem.hidesSearchBarWhenScrolling = false
+        navigationItem.searchController = self.searchController
+        searchController.searchResultsUpdater = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        viewModel.obtainContactsList()
-        tableView.reloadData()
+        
+        //tableView.reloadData()
     }
 }
 
 // MARK: UISearchResultsUpdating
 extension ContactsViewController: UISearchResultsUpdating {
-  func updateSearchResults(for searchController: UISearchController) {
-    viewModel.updateSearchResults(searchController: searchController)
-  }
+    func updateSearchResults(for searchController: UISearchController) {
+        viewModel.updateSearchResults(for: searchController)
+      
+    }
 }
 // MARK: UITableViewDelegate
 extension ContactsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let character = viewModel.contactsSectionTitles[indexPath.section]
-        if let contactValues = viewModel.contactsDict[character] {
-            let contact = contactValues[indexPath.row]
-        viewModel.showContactDetails(for: contact)
+        let filteredModels = viewModel.models.filter {$0.character == character}
+        if let contacts = filteredModels.first?.contacts {
+            let contact = contacts[indexPath.row]
+            viewModel.showContactDetails(for: contact)
         }
-        
     }
 }
 // MARK: UITableViewDataSource
@@ -127,7 +134,7 @@ extension ContactsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 20
     }
-
+    
     
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         let headerView = view as! UITableViewHeaderFooterView
@@ -138,20 +145,26 @@ extension ContactsViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let character = viewModel.contactsSectionTitles[section]
-        guard let contactValues = viewModel.contactsDict[character] else { return 0 }
+        let filteredModels = viewModel.models.filter {$0.character == character}
+        guard let contacts = filteredModels.first?.contacts else { return 0 }
         
-        return contactValues.count
+        return contacts.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ContactsTableViewCell.identifier, for: indexPath) as! ContactsTableViewCell
         
         let character = viewModel.contactsSectionTitles[indexPath.section]
-        if let contactValues = viewModel.contactsDict[character] {
-            let contact = contactValues[indexPath.row]
-           cell.set(contact.firstName, contact.lastName)
-           // cell.textLabel?.text = contact.firstName! + " " + (contact.lastName ?? "")
+        let filteredModels = viewModel.models.filter {$0.character == character}
+        if let contacts = filteredModels.first?.contacts {
+            let contact = contacts[indexPath.row]
+            cell.set(contact.firstName, contact.lastName)
         }
+//        let character = viewModel.contactsSectionTitles[indexPath.section]
+//        if let contactValues = viewModel.contactsDict[character] {
+//            let contact = contactValues[indexPath.row]
+//            cell.set(contact.firstName, contact.lastName)
+//        }
         return cell
     }
 }

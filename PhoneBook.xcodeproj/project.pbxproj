@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7723CFB6266BB715002DD09A /* DataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7723CFB5266BB715002DD09A /* DataSource.swift */; };
 		77668F6326640CBB007C6F25 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77668F6226640CBB007C6F25 /* AppDelegate.swift */; };
 		77668F6526640CBB007C6F25 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77668F6426640CBB007C6F25 /* SceneDelegate.swift */; };
 		77668F6C26640CBE007C6F25 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 77668F6B26640CBE007C6F25 /* Assets.xcassets */; };
@@ -40,6 +41,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7723CFB5266BB715002DD09A /* DataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSource.swift; sourceTree = "<group>"; };
 		77668F5F26640CBB007C6F25 /* PhoneBook.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhoneBook.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		77668F6226640CBB007C6F25 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		77668F6426640CBB007C6F25 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -130,6 +132,7 @@
 			isa = PBXGroup;
 			children = (
 				77668F7D26640EB9007C6F25 /* ContactsViewController.swift */,
+				7723CFB5266BB715002DD09A /* DataSource.swift */,
 				77668FCE2665AF61007C6F25 /* ContactsTableViewCell.swift */,
 				77668F8026640EF0007C6F25 /* ContactsViewModel.swift */,
 			);
@@ -139,6 +142,7 @@
 		77668F8E26640FBB007C6F25 /* ContactDetails */ = {
 			isa = PBXGroup;
 			children = (
+				77668F8426640F38007C6F25 /* ContactDetailsViewController.swift */,
 				77668FE026675D9D007C6F25 /* StretchyTableHeaderView.swift */,
 				77668F8826640F5C007C6F25 /* ContactDetailView.swift */,
 				77668FFA2667FD88007C6F25 /* ContactDetailTableViewCell.swift */,
@@ -212,7 +216,6 @@
 		7766900026689C00007C6F25 /* Coordinator */ = {
 			isa = PBXGroup;
 			children = (
-				77668F8426640F38007C6F25 /* ContactDetailsViewController.swift */,
 				77668F7926640DBE007C6F25 /* MainCoordinator.swift */,
 			);
 			path = Coordinator;
@@ -297,6 +300,7 @@
 				77668F9D2664109C007C6F25 /* EditViewModel.swift in Sources */,
 				77668FDC2665EEA3007C6F25 /* UINavigationController.swift in Sources */,
 				77668FA526641139007C6F25 /* ImageStorage.swift in Sources */,
+				7723CFB6266BB715002DD09A /* DataSource.swift in Sources */,
 				77668F7A26640DBE007C6F25 /* MainCoordinator.swift in Sources */,
 				77668FE126675D9E007C6F25 /* StretchyTableHeaderView.swift in Sources */,
 				77668FC426641675007C6F25 /* Images.swift in Sources */,

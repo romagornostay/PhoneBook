@@ -61,7 +61,6 @@ class ContactDetailsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         //setupLayout()
-        setupNavigationItems()
         view.addSubview(tableView)
         tableView.frame = view.bounds
         tableView.delegate = self
@@ -80,10 +79,16 @@ class ContactDetailsViewController: UIViewController {
         tableView.tableHeaderView = headerView
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setupNavigationItems()
+
+    }
+    
     private func setupLayout() {
         let currentContact = viewModel.contact
         image.image = currentContact.avatar
-        nameLabel.text = currentContact.firstName! + " " + currentContact.lastName!
+        nameLabel.text = currentContact.firstName + " " + currentContact.lastName
         phoneView.configure(title: LocalizationConstants.ContactDetails.phone, description: currentContact.phone)
         ringtoneView.configure(title: LocalizationConstants.ContactDetails.ringtone, description: currentContact.ringtone)
         notesView.configure(title: LocalizationConstants.ContactDetails.notes, description: currentContact.notes)

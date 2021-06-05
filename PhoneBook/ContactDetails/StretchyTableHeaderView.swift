@@ -23,7 +23,6 @@ final class StretchyTableHeaderView: UIView {
         image.image = Images.userImage
         image.tintColor = .gray
         image.contentMode = .scaleToFill
-        image.layer.cornerRadius = 100
         image.layer.masksToBounds = true
         return image
     }()
@@ -89,10 +88,11 @@ final class StretchyTableHeaderView: UIView {
            
        
         containerView.addSubview(image)
+        image.layer.cornerRadius = 42
         //image.layer.masksToBounds = true
         image.snp.makeConstraints { make in
             make.centerY.equalTo(avatarView.snp.centerY)
-            make.size.equalTo(avatarView.snp.height)
+            make.size.equalTo(avatarView.snp.height).multipliedBy(0.4)
             make.bottom.equalTo(-80)
             make.centerX.equalToSuperview()
             

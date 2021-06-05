@@ -11,7 +11,8 @@ import CoreData
 final class CoreDataManager {
     private let container: NSPersistentContainer
     private let imageStorage = try! ImageStorage(name: "CoreDataImages")
-    var savedEntities: [ContactEntity] = []
+    private var savedEntities: [ContactEntity] = []
+    var savedContacts: [ContactData] = []
     
     init() {
         container = NSPersistentContainer(name: "ContactContainer")
@@ -33,6 +34,23 @@ final class CoreDataManager {
         } catch let error {
             print("Error fetching. \(error)")
         }
+        createContactsFromEntities()
+    }
+    
+    func createContactsFromEntities() {
+        savedContacts.removeAll()
+        for entity in savedEntities {
+            entity.storage = imageStorage
+            let contact = ContactData(id: entity.id,
+                                      firstName: entity.firstName!,
+                                      lastName: entity.lastName!,
+                                      phone: entity.phone!,
+                                      ringtone: entity.ringtone!,
+                                      notes: entity.notes!,
+                                      avatar: entity.image)
+            savedContacts.append(contact)
+        }
+        print("---CONTACTSfromEntities---")
     }
     
     func addEntity(with contact: ContactData) {
@@ -48,17 +66,17 @@ final class CoreDataManager {
         saveContext()
     }
     
-    func convertEntityToContact(by entity: ContactEntity) -> ContactData {
-        entity.storage = imageStorage
-        let contact = ContactData(id: entity.id,
-                                  firstName: entity.firstName!,
-                                  lastName: entity.lastName!,
-                                  phone: entity.phone!,
-                                  ringtone: entity.ringtone!,
-                                  notes: entity.notes!,
-                                  avatar: entity.image)
-        return contact
-    }
+//    func convertEntityToContact(by entity: ContactEntity) -> ContactData {
+//        entity.storage = imageStorage
+//        let contact = ContactData(id: entity.id,
+//                                  firstName: entity.firstName!,
+//                                  lastName: entity.lastName!,
+//                                  phone: entity.phone!,
+//                                  ringtone: entity.ringtone!,
+//                                  notes: entity.notes!,
+//                                  avatar: entity.image)
+//        return contact
+//    }
     
     func updateEntity(with contact: ContactData) {
         for entity in savedEntities {
