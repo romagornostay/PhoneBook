@@ -10,9 +10,9 @@ import SnapKit
 
 
 class CreateContactViewController: UIViewController {
-    private let viewModel: CreateContactViewModel
+    private let viewModel: ContactViewModel
     
-    init(viewModel: CreateContactViewModel) {
+    init(viewModel: ContactViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -20,7 +20,6 @@ class CreateContactViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    private let ringtones = ["Apex","Cosmic","Crystals","Popcorn","Pulse","Twinkle"]
     
     private let textFieldName: UITextField = {
         let textField = UITextField()
@@ -428,10 +427,10 @@ extension CreateContactViewController: UITextFieldDelegate {
 //MARK:-- UIPickerViewDelegate
 extension CreateContactViewController: UIPickerViewDelegate {
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return ringtones[row]
+        return Constants.ringtones[row]
     }
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        ringtoneField.text = ringtones[row]
+        ringtoneField.text = Constants.ringtones[row]
     }
 }
 //MARK:-- UIPickerViewDataSource
@@ -441,7 +440,7 @@ extension CreateContactViewController: UIPickerViewDataSource {
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        ringtones.count
+        Constants.ringtones.count
     }
 }
 

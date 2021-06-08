@@ -33,8 +33,6 @@ class ContactListViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    let contactIndexTitles = ["#", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -119,7 +117,7 @@ extension ContactListViewController: UITableViewDataSource {
     }
     
     func sectionIndexTitles(for tableView: UITableView) -> [String]? {
-        return contactIndexTitles
+        return Constants.contactIndexTitles
     }
     
     func tableView(_ tableView: UITableView, sectionForSectionIndexTitle title: String, at index: Int) -> Int {
@@ -153,18 +151,12 @@ extension ContactListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ContactTableViewCell.identifier, for: indexPath) as! ContactTableViewCell
-        
         let character = viewModel.contactsSectionTitles[indexPath.section]
         let filteredModels = viewModel.models.filter {$0.character == character}
         if let contacts = filteredModels.first?.contacts {
             let contact = contacts[indexPath.row]
             cell.set(contact.firstName, contact.lastName)
         }
-//        let character = viewModel.contactsSectionTitles[indexPath.section]
-//        if let contactValues = viewModel.contactsDict[character] {
-//            let contact = contactValues[indexPath.row]
-//            cell.set(contact.firstName, contact.lastName)
-//        }
         return cell
     }
 }

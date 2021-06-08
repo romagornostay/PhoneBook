@@ -9,10 +9,9 @@ import UIKit
 
 
 final class ContactListCoordinator: Coordinator {
-    
     private let presenter: UINavigationController
     private var coordinator: ContactDetailsCoordinator?
-    weak var contactListViewModel: ContactListViewModel?
+    private weak var contactListViewModel: ContactListViewModel?
     
     init(presenter: UINavigationController) {
         self.presenter = presenter
@@ -27,18 +26,16 @@ final class ContactListCoordinator: Coordinator {
         presenter.pushViewController(contactListViewController, animated: false)
     }
 }
-
-
 // MARK: ContactListViewModelDelegate
 extension ContactListCoordinator: ContactListViewModelDelegate {
-    func showContactDetails(_ contact: ContactData) {
+    func contactListViewModelDidRequestShowContactDetails(_ contact: ContactData) {
         let coordinator = ContactDetailsCoordinator(presenter: presenter, contact: contact, viewModel: contactListViewModel)
         coordinator.start()
         self.coordinator = coordinator
     }
     
-    func addContact() {
-        let viewModel = CreateContactViewModel(with: nil)
+    func contactListViewModelDidRequestAddContact() {
+        let viewModel = ContactViewModel(with: nil)
         viewModel.createDelegate = self
         let viewController = CreateContactViewController(viewModel: viewModel)
         viewController.navigationItem.largeTitleDisplayMode = .never
@@ -47,7 +44,7 @@ extension ContactListCoordinator: ContactListViewModelDelegate {
 }
 // MARK: CreateContactViewModelDelegate
 extension ContactListCoordinator: CreateContactViewModelDelegate {
-    func addNewContact(_ contact: ContactData) {
+    func contactViewModelDidRequestAddNewContact(_ contact: ContactData) {
         contactListViewModel?.addContact(contact)
         presenter.popViewControllerToBottom()
     }

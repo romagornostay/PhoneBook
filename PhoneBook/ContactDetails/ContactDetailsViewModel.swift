@@ -8,7 +8,7 @@
 import UIKit
 
 protocol ContactDetailsViewModelDelegate: AnyObject {
-    func editContact(_ contact: ContactData)
+    func contactDetailsViewModelDidRequestEditContact(_ contact: ContactData)
 }
 
 final class ContactDetailsViewModel {
@@ -21,9 +21,8 @@ final class ContactDetailsViewModel {
         
     }
     
-    
     func editContact(_ contact: ContactData) {
-        delegate?.editContact(contact)
+        delegate?.contactDetailsViewModelDidRequestEditContact(contact)
     }
     
 }

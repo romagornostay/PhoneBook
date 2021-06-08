@@ -1,5 +1,5 @@
 //
-//  CreateContactViewModel.swift
+//  ContactViewModel.swift
 //  PhoneBook
 //
 //  Created by SalemMacPro on 31.5.21.
@@ -8,16 +8,15 @@
 import Foundation
 
 protocol CreateContactViewModelDelegate: AnyObject {
-    func addNewContact(_ contact: ContactData)
+    func contactViewModelDidRequestAddNewContact(_ contact: ContactData)
 }
 
 protocol UpdateContactViewModelDelegate: AnyObject {
-    func updateContact(_ contact: ContactData)
-    
-    func deleteContact(_ contact: ContactData)
+    func contactViewModelDidRequestUpdateContact(_ contact: ContactData)
+    func contactsViewModelDidRequestDeleteContact(_ contact: ContactData)
 }
 
-final class CreateContactViewModel {
+final class ContactViewModel {
     weak var createDelegate: CreateContactViewModelDelegate?
     weak var updateDelegate: UpdateContactViewModelDelegate?
     let contact: ContactData?
@@ -27,16 +26,15 @@ final class CreateContactViewModel {
     }
     
     func addContact(_ contact: ContactData) {
-        createDelegate?.addNewContact(contact)
+        createDelegate?.contactViewModelDidRequestAddNewContact(contact)
     }
     
     func updateContact(_ contact: ContactData) {
-        print("SAVE_VM")
-        updateDelegate?.updateContact(contact)
+        updateDelegate?.contactViewModelDidRequestUpdateContact(contact)
     }
     func deleteContact() {
         guard let contact = contact else { return }
-        updateDelegate?.deleteContact(contact)
+        updateDelegate?.contactsViewModelDidRequestDeleteContact(contact)
     }
 }
 

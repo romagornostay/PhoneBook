@@ -21,13 +21,11 @@ class MainCoordinator: Coordinator {
         rootViewController = UINavigationController()
         rootViewController.navigationBar.prefersLargeTitles = true
         coordinator = ContactListCoordinator(presenter: rootViewController)
-        
     }
     
     func start() {
         window.rootViewController = rootViewController
         coordinator.start()
         window.makeKeyAndVisible()
-        
     }
 }

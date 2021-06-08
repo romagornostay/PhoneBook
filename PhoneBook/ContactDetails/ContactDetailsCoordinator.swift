@@ -32,8 +32,8 @@ final class ContactDetailsCoordinator: Coordinator {
 
 // MARK: ContactDetailsViewModelDelegate
 extension ContactDetailsCoordinator: ContactDetailsViewModelDelegate {
-    func editContact(_ contact: ContactData) {
-        let viewModel = CreateContactViewModel(with: contact)
+    func contactDetailsViewModelDidRequestEditContact(_ contact: ContactData) {
+        let viewModel = ContactViewModel(with: contact)
         viewModel.updateDelegate = self
         let viewController = CreateContactViewController(viewModel: viewModel)
         viewController.navigationItem.largeTitleDisplayMode = .never
@@ -43,14 +43,14 @@ extension ContactDetailsCoordinator: ContactDetailsViewModelDelegate {
 
 
 extension ContactDetailsCoordinator: UpdateContactViewModelDelegate {
-    func updateContact(_ contact: ContactData) {
+    func contactViewModelDidRequestUpdateContact(_ contact: ContactData) {
         if let viewModel = contactListViewModel {
             viewModel.updateContact(contact)
             presenter.popToRootViewController(animated: true)
         }
     }
     
-    func deleteContact(_ contact: ContactData) {
+    func contactsViewModelDidRequestDeleteContact(_ contact: ContactData) {
         if let viewModel = contactListViewModel {
             viewModel.deleteContact(contact)
             presenter.popToRootViewController(animated: true)

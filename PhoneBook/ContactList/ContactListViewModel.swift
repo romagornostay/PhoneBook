@@ -9,9 +9,8 @@ import UIKit
 
 
 protocol ContactListViewModelDelegate: AnyObject {
-    func showContactDetails(_ contact: ContactData)
-    
-    func addContact()
+    func contactListViewModelDidRequestShowContactDetails(_ contact: ContactData)
+    func contactListViewModelDidRequestAddContact()
 }
 
 final class ContactListViewModel {
@@ -46,12 +45,12 @@ final class ContactListViewModel {
     }
     
     func showContactDetails(for contact: ContactData) {
-        delegate?.showContactDetails(contact)
+        delegate?.contactListViewModelDidRequestShowContactDetails(contact)
         print("OPEN---2--")
     }
     
     func openViewAddContact() {
-        delegate?.addContact()
+        delegate?.contactListViewModelDidRequestAddContact()
         print("AddContact---2--")
     }
     

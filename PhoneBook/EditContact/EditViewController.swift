@@ -412,7 +412,7 @@ extension EditViewController: UITextFieldDelegate {
         return false
         
         //textField.resignFirstResponder()
-        //viewModel.addContact(newContact)
+        //viewModel.contactListViewModelDidRequestAddContact(newContact)
         //return true
     }
 }
