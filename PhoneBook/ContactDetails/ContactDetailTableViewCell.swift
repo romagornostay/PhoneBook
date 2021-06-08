@@ -9,7 +9,7 @@ import UIKit
 
 class ContactDetailTableViewCell: UITableViewCell {
     
-    static var identifier = "ContactDetailTableViewCell"
+    static var identifier = String(describing: ContactDetailTableViewCell.self)
     
     private let titleLabel: UILabel = {
         var label = UILabel()

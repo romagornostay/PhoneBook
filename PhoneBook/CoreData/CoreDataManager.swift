@@ -57,12 +57,12 @@ final class CoreDataManager {
         let newUser = insert(ContactEntity.self, into: container.viewContext)
         newUser.storage = imageStorage
         
+        newUser.image = contact.avatar
         newUser.firstName = contact.firstName
         newUser.lastName = contact.lastName
         newUser.phone = contact.phone
         newUser.ringtone = contact.ringtone
         newUser.notes = contact.notes
-        newUser.image = contact.avatar
         saveContext()
     }
     

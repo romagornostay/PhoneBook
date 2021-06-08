@@ -1,5 +1,5 @@
 //
-//  ContactsTableViewCell.swift
+//  ContactTableViewCell.swift
 //  PhoneBook
 //
 //  Created by SalemMacPro on 1.6.21.
@@ -8,16 +8,16 @@
 import UIKit
 import SnapKit
 
-class ContactsTableViewCell: UITableViewCell {
+class ContactTableViewCell: UITableViewCell {
     
-    static var identifier = "ContactsTableViewCell"
+    static var identifier = String(describing: ContactTableViewCell.self)
     
-    var firstNameLabel: UILabel = {
+    private let firstNameLabel: UILabel = {
         let label = UILabel()
         label.font = .base2
         return label
     }()
-    var lastNameLabel: UILabel = {
+    private let lastNameLabel: UILabel = {
         let label = UILabel()
         label.font = .base4
         return label

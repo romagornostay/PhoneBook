@@ -1,5 +1,5 @@
 //
-//  ContactsViewModel.swift
+//  ContactListViewModel.swift
 //  PhoneBook
 //
 //  Created by SalemMacPro on 31.5.21.
@@ -7,28 +7,26 @@
 
 import UIKit
 
-struct Model {
-    let character: String
-    var contacts: [ContactData]
-}
 
-protocol ContactsViewModelDelegate: AnyObject {
+protocol ContactListViewModelDelegate: AnyObject {
     func showContactDetails(_ contact: ContactData)
     
     func addContact()
 }
 
-final class ContactsViewModel {
+final class ContactListViewModel {
     private let manager = CoreDataManager()
-    weak var delegate: ContactsViewModelDelegate?
-    var models: [Model] = []
-    //var contactsDict = [String: [ContactData]]()
+    weak var delegate: ContactListViewModelDelegate?
+    var models: [ContactsModel] = []
     var contactsSectionTitles = [String]()
     var onDidUpdateData: (() -> Void)?
     
     func updateSearchResults(for searchController: UISearchController) {
         //print("----SEARCHING...---")
         guard let text = searchController.searchBar.text else { return }
+       //MARK: --TODO!
+        searchController.obscuresBackgroundDuringPresentation = text.isEmpty
+        
         var filteredContacts = [ContactData]()
         filteredContacts = manager.savedContacts.filter({text.isEmpty ? true : "\($0)".lowercased().contains(text.lowercased())})
         filteredContacts = filteredContacts.sorted(by: { $0.lastName < $1.lastName })
@@ -41,7 +39,7 @@ final class ContactsViewModel {
             contactsSectionTitles.removeAll()
             contactsSectionTitles = ["TOP NAME MATCHES"]
             if let character = contactsSectionTitles.first {
-            models = [Model(character: character, contacts: filteredContacts)]
+            models = [ContactsModel(character: character, contacts: filteredContacts)]
             }
         }
         onDidUpdateData?()
@@ -49,10 +47,12 @@ final class ContactsViewModel {
     
     func showContactDetails(for contact: ContactData) {
         delegate?.showContactDetails(contact)
+        print("OPEN---2--")
     }
     
     func openViewAddContact() {
         delegate?.addContact()
+        print("AddContact---2--")
     }
     
     func addContact(_ contact: ContactData) {
@@ -76,18 +76,18 @@ final class ContactsViewModel {
     func createModels() {
         //let arrayOfFirstLetter = manager.savedContacts.map {$0.lastName.first}
         let set = Set(manager.savedContacts.map {$0.lastName.first})
-        models = set.map { letter -> Model in
+        models = set.map { letter -> ContactsModel in
             var character = ""
             if let char = letter {
                 character = String(describing: char)
             }
             let contacts = manager.savedContacts.filter {$0.lastName.first == letter}
-            let model = Model(character: character, contacts: contacts)
+            let model = ContactsModel(character: character, contacts: contacts)
             return model
         }
         contactsSectionTitles = [String](models.compactMap { $0.character })
         contactsSectionTitles = contactsSectionTitles.sorted(by: { $0 < $1 })
-        print("---1---\(contactsSectionTitles)")
+        //print("---1---\(contactsSectionTitles)")
     }
 }
 

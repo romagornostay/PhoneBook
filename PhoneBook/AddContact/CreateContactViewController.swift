@@ -1,5 +1,5 @@
 //
-//  AddContactViewController.swift
+//  CreateContactViewController.swift
 //  PhoneBook
 //
 //  Created by SalemMacPro on 31.5.21.
@@ -9,10 +9,10 @@ import UIKit
 import SnapKit
 
 
-class AddContactViewController: UIViewController {
-    private let viewModel: AddContactViewModel
+class CreateContactViewController: UIViewController {
+    private let viewModel: CreateContactViewModel
     
-    init(viewModel: AddContactViewModel) {
+    init(viewModel: CreateContactViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -60,6 +60,7 @@ class AddContactViewController: UIViewController {
         textField.placeholder = LocalizationConstants.AddContact.defaultRingtone
         textField.backgroundColor = .white
         textField.returnKeyType = .next
+        //textField.inputAccessoryView =
         return textField
     }()
     
@@ -94,9 +95,15 @@ class AddContactViewController: UIViewController {
     
     
     private lazy var newContact: ContactData = {
+        
         let name = textFieldName.text!
         let lastName = textFieldLastName.text ?? ""
-        let phone = phoneField.text!
+        
+        var phone = ""
+        if let text = phoneField.text {
+            phone = text.applyPatternOnNumbers(pattern: "+# (###) ###-####", replacmentCharacter: "#")
+        }
+        
         let ringtone = ringtoneField.text ?? "Default"
         let notes = notesField.text ?? "Wake up, Neo…"
         let contact = ContactData(id: nil, firstName: name, lastName: lastName, phone: phone, ringtone: ringtone, notes: notes, avatar: avatarView.image)
@@ -106,6 +113,7 @@ class AddContactViewController: UIViewController {
     private let avatarView: UIImageView = {
         let image = UIImageView()
         image.image = Images.userImage
+        image.tintColor = .lightGray
         image.contentMode = .scaleToFill
         image.layer.cornerRadius = 45
         image.backgroundColor = .white
@@ -118,9 +126,12 @@ class AddContactViewController: UIViewController {
         return button
     }()
     
-    private let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneTapped))
-    private let cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelTapped))
-    
+    private let deleteButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle(LocalizationConstants.EditContact.deleteButton, for: .normal)
+        return button
+    }()
+   
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -130,17 +141,42 @@ class AddContactViewController: UIViewController {
         setupTextFields()
         setupRingtonePicker()
         setupMissKeyboardTapGesture()
+        setupContactData()
+    }
+    
+    private func setupContactData() {
+        if let currentContact = viewModel.contact {
+            textFieldName.text = currentContact.firstName
+            textFieldLastName.text =  currentContact.lastName
+            phoneField.text = currentContact.phone
+            ringtoneField.text = currentContact.ringtone
+            notesField.text = currentContact.notes
+            avatarView.image = currentContact.avatar
+            avatarView.layer.masksToBounds = true
+        }
     }
     
     
     private func setupNavigationItems() {
-        navigationItem.rightBarButtonItem = doneButton
-        navigationItem.leftBarButtonItem = cancelButton
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneTapped))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelTapped))
     }
     
     @objc
     private func doneTapped() {
-        viewModel.addContact(newContact)
+        if var currentContact = viewModel.contact {
+            currentContact.firstName = textFieldName.text!
+            currentContact.lastName = textFieldLastName.text ?? ""
+            currentContact.phone = phoneField.text!
+            currentContact.ringtone = ringtoneField.text ?? "Default"
+            currentContact.notes = notesField.text ?? "Wake up, Neo…"
+            currentContact.avatar = avatarView.image
+            viewModel.updateContact(currentContact)
+        } else {
+            print("--NewAdd---")
+            viewModel.addContact(newContact)
+           
+        }
     }
     
     @objc
@@ -154,13 +190,14 @@ class AddContactViewController: UIViewController {
         phoneField.delegate = self
         ringtoneField.delegate = self
         notesField.delegate = self
-        addInputAccessoryForTextFields([phoneField,ringtoneField,notesField])
+        addInputAccessoryForTextFields([phoneField,ringtoneField, notesField])
     }
     
     func addInputAccessoryForTextFields(_ textFields: [UITextField]) {
         for (index, textField) in textFields.enumerated() {
             let toolbar: UIToolbar = UIToolbar()
             toolbar.sizeToFit()
+            
             var items = [UIBarButtonItem]()
             let nextButton = UIBarButtonItem(title: LocalizationConstants.AddContact.nextButton, style: .plain, target: nil, action: nil)
             if textField == textFields.last {
@@ -172,11 +209,14 @@ class AddContactViewController: UIViewController {
             items.append(contentsOf: [nextButton])
             
             let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-            let doneBut = UIBarButtonItem(title: LocalizationConstants.AddContact.doneButton, style: .plain, target: view, action: #selector(UIView.endEditing))
-            items.append(contentsOf: [spacer, doneBut])
-            
+            let doneButton = UIBarButtonItem(title: LocalizationConstants.AddContact.doneButton, style: .plain, target: view, action: #selector(UIView.endEditing))
+            items.append(contentsOf: [spacer, doneButton])
             toolbar.setItems(items, animated: false)
-            textField.inputAccessoryView = toolbar
+            if textField == textFields.last {
+                toolbar.isHidden = true
+            } else {
+                textField.inputAccessoryView = toolbar
+            }
         }
     }
     
@@ -241,8 +281,6 @@ class AddContactViewController: UIViewController {
     private func setupLayout() {
         
         view.backgroundColor = .white
-        
-        
         view.addSubview(avatarView)
         
         avatarView.isUserInteractionEnabled = true
@@ -353,11 +391,22 @@ class AddContactViewController: UIViewController {
             make.leading.trailing.equalTo(notesField)
             make.height.equalTo(1)
         }
+        view.addSubview(deleteButton)
+        deleteButton.snp.makeConstraints { (make) in
+            make.bottom.equalTo(-400)
+            make.leading.equalTo(20)
+            
+        }
+        deleteButton.addTarget(self, action: #selector(deleteTapped), for: .touchUpInside)
+    }
+    @objc
+    private func deleteTapped() {
+        viewModel.deleteContact()
     }
 }
 
 //MARK:-- UITextFieldDelegate
-extension AddContactViewController: UITextFieldDelegate {
+extension CreateContactViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         switch textField {
         case textFieldName:
@@ -377,7 +426,7 @@ extension AddContactViewController: UITextFieldDelegate {
     }
 }
 //MARK:-- UIPickerViewDelegate
-extension AddContactViewController: UIPickerViewDelegate {
+extension CreateContactViewController: UIPickerViewDelegate {
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return ringtones[row]
     }
@@ -386,7 +435,7 @@ extension AddContactViewController: UIPickerViewDelegate {
     }
 }
 //MARK:-- UIPickerViewDataSource
-extension AddContactViewController: UIPickerViewDataSource {
+extension CreateContactViewController: UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         1
     }
@@ -397,7 +446,7 @@ extension AddContactViewController: UIPickerViewDataSource {
 }
 
 //MARK:-- ImagePicker delegate
-extension AddContactViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+extension CreateContactViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let pickedImage = info[.originalImage] as? UIImage {
             avatarView.image = pickedImage

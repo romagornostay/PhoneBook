@@ -1,5 +1,5 @@
 //
-//  ContactsViewController.swift
+//  ContactListViewController.swift
 //  PhoneBook
 //
 //  Created by SalemMacPro on 31.5.21.
@@ -7,13 +7,13 @@
 
 import UIKit
 
-class ContactsViewController: UIViewController {
-    private let viewModel: ContactsViewModel
+class ContactListViewController: UIViewController {
+    private let viewModel: ContactListViewModel
     
     private let tableView: UITableView = {
-        let table = UITableView.init(frame: .zero, style: .grouped)
+        let table = UITableView.init(frame: .zero, style: .plain)
         //table.separatorStyle = .none
-        table.register(ContactsTableViewCell.self, forCellReuseIdentifier: ContactsTableViewCell.identifier)
+        table.register(ContactTableViewCell.self, forCellReuseIdentifier: ContactTableViewCell.identifier)
         return table
     }()
     
@@ -24,7 +24,7 @@ class ContactsViewController: UIViewController {
         return searchController
     }()
     
-    init(viewModel: ContactsViewModel) {
+    init(viewModel: ContactListViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -43,7 +43,6 @@ class ContactsViewController: UIViewController {
         setupLayout()
         setupSearchController()
         
-        
         binding()
         viewModel.createModels()
         
@@ -54,10 +53,8 @@ class ContactsViewController: UIViewController {
     
     private func binding() {
         viewModel.onDidUpdateData = { [weak self] in
-            
-           // DispatchQueue.main.async {
                 self?.tableView.reloadData()
-                print("----Binding!!!----")
+                //print("----Binding!!!----")
         }
     }
     
@@ -71,6 +68,7 @@ class ContactsViewController: UIViewController {
     @objc
     private func addTapped(){
         viewModel.openViewAddContact()
+        print("AddContact---1--")
     }
     
     private func setupLayout() {
@@ -83,7 +81,7 @@ class ContactsViewController: UIViewController {
     func setupSearchController() {
         definesPresentationContext = true
         navigationItem.hidesSearchBarWhenScrolling = false
-        navigationItem.searchController = self.searchController
+        navigationItem.searchController = searchController
         searchController.searchResultsUpdater = self
     }
     
@@ -95,25 +93,27 @@ class ContactsViewController: UIViewController {
 }
 
 // MARK: UISearchResultsUpdating
-extension ContactsViewController: UISearchResultsUpdating {
+extension ContactListViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         viewModel.updateSearchResults(for: searchController)
       
     }
 }
 // MARK: UITableViewDelegate
-extension ContactsViewController: UITableViewDelegate {
+extension ContactListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let character = viewModel.contactsSectionTitles[indexPath.section]
         let filteredModels = viewModel.models.filter {$0.character == character}
         if let contacts = filteredModels.first?.contacts {
             let contact = contacts[indexPath.row]
             viewModel.showContactDetails(for: contact)
+            print("OPEN---1--")
+            tableView.deselectRow(at: indexPath, animated: true)
         }
     }
 }
 // MARK: UITableViewDataSource
-extension ContactsViewController: UITableViewDataSource {
+extension ContactListViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return viewModel.contactsSectionTitles.count
     }
@@ -132,7 +132,7 @@ extension ContactsViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 20
+        return 28
     }
     
     
@@ -152,7 +152,7 @@ extension ContactsViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: ContactsTableViewCell.identifier, for: indexPath) as! ContactsTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: ContactTableViewCell.identifier, for: indexPath) as! ContactTableViewCell
         
         let character = viewModel.contactsSectionTitles[indexPath.section]
         let filteredModels = viewModel.models.filter {$0.character == character}

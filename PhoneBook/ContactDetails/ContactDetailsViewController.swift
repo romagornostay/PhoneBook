@@ -85,6 +85,14 @@ class ContactDetailsViewController: UIViewController {
 
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        // Restore the navigation bar to default
+        navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
+        navigationController?.navigationBar.shadowImage = nil
+    }
+    
     private func setupLayout() {
         let currentContact = viewModel.contact
         image.image = currentContact.avatar
