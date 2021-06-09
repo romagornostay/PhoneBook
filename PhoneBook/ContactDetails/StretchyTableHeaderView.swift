@@ -67,7 +67,6 @@ final class StretchyTableHeaderView: UIView {
     
     private var avatarViewHeight = NSLayoutConstraint()
     private var avatarViewBottom = NSLayoutConstraint()
-//private var containerView = UIView()
     private var containerViewHeight = NSLayoutConstraint()
     
     override init(frame: CGRect) {
@@ -85,11 +84,9 @@ final class StretchyTableHeaderView: UIView {
     private func setupLayout() {
         addSubview(containerView)
         containerView.addSubview(avatarView)
-           
-       
-        containerView.addSubview(image)
-        image.layer.cornerRadius = 42
-        //image.layer.masksToBounds = true
+        avatarView.addSubview(image)
+//        image.layer.cornerRadius = 43.33
+//        image.layer.masksToBounds = true
         image.snp.makeConstraints { make in
             make.centerY.equalTo(avatarView.snp.centerY)
             make.size.equalTo(avatarView.snp.height).multipliedBy(0.4)
@@ -137,5 +134,9 @@ final class StretchyTableHeaderView: UIView {
         containerView.clipsToBounds = offsetY <= 0
         avatarViewBottom.constant = offsetY >= 0 ? 0 : -offsetY/2
         avatarViewHeight.constant = max(offsetY + scrollView.contentInset.top, scrollView.contentInset.top)
+        
+        image.layer.cornerRadius = image.bounds.height/2
+        print(image.bounds.height/2)
+        print(image.frame.size.height/2)
     }
 }

@@ -48,11 +48,14 @@ class ContactListViewController: UIViewController {
         tableView.dataSource = self
         
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+    }
     
     private func binding() {
         viewModel.onDidUpdateData = { [weak self] in
                 self?.tableView.reloadData()
-                //print("----Binding!!!----")
         }
     }
     
@@ -65,8 +68,7 @@ class ContactListViewController: UIViewController {
     
     @objc
     private func addTapped(){
-        viewModel.openViewAddContact()
-        print("AddContact---1--")
+        viewModel.addContact()
     }
     
     private func setupLayout() {
@@ -81,12 +83,6 @@ class ContactListViewController: UIViewController {
         navigationItem.hidesSearchBarWhenScrolling = false
         navigationItem.searchController = searchController
         searchController.searchResultsUpdater = self
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        //tableView.reloadData()
     }
 }
 

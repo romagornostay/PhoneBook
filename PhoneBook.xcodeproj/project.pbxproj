@@ -22,10 +22,9 @@
 		77668F8526640F38007C6F25 /* ContactDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77668F8426640F38007C6F25 /* ContactDetailsViewController.swift */; };
 		77668F8926640F5C007C6F25 /* ContactDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77668F8826640F5C007C6F25 /* ContactDetailView.swift */; };
 		77668F8C26640F82007C6F25 /* ContactDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77668F8B26640F82007C6F25 /* ContactDetailsViewModel.swift */; };
-		77668F9126640FE9007C6F25 /* CreateContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77668F9026640FE9007C6F25 /* CreateContactViewController.swift */; };
+		77668F9126640FE9007C6F25 /* ContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77668F9026640FE9007C6F25 /* ContactViewController.swift */; };
 		77668F9526641036007C6F25 /* ContactViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77668F9426641036007C6F25 /* ContactViewModel.swift */; };
 		77668F9926641081007C6F25 /* EditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77668F9826641081007C6F25 /* EditViewController.swift */; };
-		77668F9D2664109C007C6F25 /* EditViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77668F9C2664109C007C6F25 /* EditViewModel.swift */; };
 		77668FA1266410FC007C6F25 /* ContactData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77668FA0266410FC007C6F25 /* ContactData.swift */; };
 		77668FA526641139007C6F25 /* ImageStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77668FA426641139007C6F25 /* ImageStorage.swift */; };
 		77668FA8266411B2007C6F25 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77668FA7266411B2007C6F25 /* CoreDataManager.swift */; };
@@ -62,10 +61,9 @@
 		77668F8426640F38007C6F25 /* ContactDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactDetailsViewController.swift; sourceTree = "<group>"; };
 		77668F8826640F5C007C6F25 /* ContactDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactDetailView.swift; sourceTree = "<group>"; };
 		77668F8B26640F82007C6F25 /* ContactDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactDetailsViewModel.swift; sourceTree = "<group>"; };
-		77668F9026640FE9007C6F25 /* CreateContactViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateContactViewController.swift; sourceTree = "<group>"; };
+		77668F9026640FE9007C6F25 /* ContactViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactViewController.swift; sourceTree = "<group>"; };
 		77668F9426641036007C6F25 /* ContactViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactViewModel.swift; sourceTree = "<group>"; };
 		77668F9826641081007C6F25 /* EditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditViewController.swift; sourceTree = "<group>"; };
-		77668F9C2664109C007C6F25 /* EditViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditViewModel.swift; sourceTree = "<group>"; };
 		77668FA0266410FC007C6F25 /* ContactData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactData.swift; sourceTree = "<group>"; };
 		77668FA426641139007C6F25 /* ImageStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStorage.swift; sourceTree = "<group>"; };
 		77668FA7266411B2007C6F25 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
@@ -118,7 +116,6 @@
 				77668F6426640CBB007C6F25 /* SceneDelegate.swift */,
 				77668FD92665BD71007C6F25 /* Localizable.strings */,
 				77668FD42665BD4E007C6F25 /* LocalizationConstants.swift */,
-				77668FAA2664123C007C6F25 /* ContactContainer.xcdatamodeld */,
 				77668FDE2665FD82007C6F25 /* Utilities */,
 				77668FCB26658B80007C6F25 /* Extensions */,
 				77668FB4266413C8007C6F25 /* CoreDataEntities */,
@@ -128,7 +125,7 @@
 				77668F8326640F0A007C6F25 /* ContactList */,
 				77668F8E26640FBB007C6F25 /* ContactDetails */,
 				77668F972664104F007C6F25 /* AddContact */,
-				77668F9F266410AF007C6F25 /* EditContact */,
+				77668F9F266410AF007C6F25 /* !!!EditContact!!! */,
 				77668F6B26640CBE007C6F25 /* Assets.xcassets */,
 				77668F6D26640CBE007C6F25 /* LaunchScreen.storyboard */,
 				77668F7026640CBE007C6F25 /* Info.plist */,
@@ -164,19 +161,18 @@
 		77668F972664104F007C6F25 /* AddContact */ = {
 			isa = PBXGroup;
 			children = (
-				77668F9026640FE9007C6F25 /* CreateContactViewController.swift */,
+				77668F9026640FE9007C6F25 /* ContactViewController.swift */,
 				77668F9426641036007C6F25 /* ContactViewModel.swift */,
 			);
 			path = AddContact;
 			sourceTree = "<group>";
 		};
-		77668F9F266410AF007C6F25 /* EditContact */ = {
+		77668F9F266410AF007C6F25 /* !!!EditContact!!! */ = {
 			isa = PBXGroup;
 			children = (
 				77668F9826641081007C6F25 /* EditViewController.swift */,
-				77668F9C2664109C007C6F25 /* EditViewModel.swift */,
 			);
-			path = EditContact;
+			path = "!!!EditContact!!!";
 			sourceTree = "<group>";
 		};
 		77668FB4266413C8007C6F25 /* CoreDataEntities */ = {
@@ -212,6 +208,7 @@
 			children = (
 				77668FA426641139007C6F25 /* ImageStorage.swift */,
 				77668FA7266411B2007C6F25 /* CoreDataManager.swift */,
+				77668FAA2664123C007C6F25 /* ContactContainer.xcdatamodeld */,
 			);
 			path = CoreData;
 			sourceTree = "<group>";
@@ -309,7 +306,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				77668F9D2664109C007C6F25 /* EditViewModel.swift in Sources */,
 				77668FDC2665EEA3007C6F25 /* UINavigationController+CustomTransition.swift in Sources */,
 				77668FA526641139007C6F25 /* ImageStorage.swift in Sources */,
 				7723CFB6266BB715002DD09A /* DataSource.swift in Sources */,
@@ -325,7 +321,7 @@
 				77668F8126640EF0007C6F25 /* ContactListViewModel.swift in Sources */,
 				77668F8926640F5C007C6F25 /* ContactDetailView.swift in Sources */,
 				7723CFBC266E20D9002DD09A /* ContactDetailsCoordinator.swift in Sources */,
-				77668F9126640FE9007C6F25 /* CreateContactViewController.swift in Sources */,
+				77668F9126640FE9007C6F25 /* ContactViewController.swift in Sources */,
 				77668F8526640F38007C6F25 /* ContactDetailsViewController.swift in Sources */,
 				77668FD52665BD4E007C6F25 /* LocalizationConstants.swift in Sources */,
 				77668F9526641036007C6F25 /* ContactViewModel.swift in Sources */,

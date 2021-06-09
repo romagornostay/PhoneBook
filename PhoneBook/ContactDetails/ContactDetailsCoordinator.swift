@@ -35,7 +35,7 @@ extension ContactDetailsCoordinator: ContactDetailsViewModelDelegate {
     func contactDetailsViewModelDidRequestEditContact(_ contact: ContactData) {
         let viewModel = ContactViewModel(with: contact)
         viewModel.updateDelegate = self
-        let viewController = CreateContactViewController(viewModel: viewModel)
+        let viewController = ContactViewController(viewModel: viewModel)
         viewController.navigationItem.largeTitleDisplayMode = .never
         presenter.pushViewController(viewController, animated: false)
     }

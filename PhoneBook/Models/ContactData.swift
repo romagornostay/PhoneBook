@@ -10,10 +10,10 @@ import UIKit
 
 struct ContactData {
     let id: UUID?
-    var firstName: String
+    var firstName: String?
     var lastName: String
-    var phone: String
-    var ringtone: String
-    var notes: String
+    var phone: String?
+    var ringtone: String?
+    var notes: String?
     var avatar: UIImage?
 }

@@ -20,6 +20,7 @@ final class ContactViewModel {
     weak var createDelegate: CreateContactViewModelDelegate?
     weak var updateDelegate: UpdateContactViewModelDelegate?
     let contact: ContactData?
+    private let maxNumberCount = 11
     
     init(with contact: ContactData?) {
         self.contact = contact
@@ -32,23 +33,40 @@ final class ContactViewModel {
     func updateContact(_ contact: ContactData) {
         updateDelegate?.contactViewModelDidRequestUpdateContact(contact)
     }
+    
     func deleteContact() {
         guard let contact = contact else { return }
         updateDelegate?.contactsViewModelDidRequestDeleteContact(contact)
     }
-}
-
-extension String {
-
-    func applyPatternOnNumbers(pattern: String, replacmentCharacter: Character) -> String {
-        var pureNumber = self.replacingOccurrences( of: "[^0-9]", with: "", options: .regularExpression)
-        for index in 0 ..< pattern.count {
-            guard index < pureNumber.count else { return pureNumber }
-            let stringIndex = String.Index(utf16Offset: index, in: self)
-            let patternCharacter = pattern[stringIndex]
-            guard patternCharacter != replacmentCharacter else { continue }
-            pureNumber.insert(patternCharacter, at: stringIndex)
+    
+    func formatNumber(phoneNumber: String, shouldRemoveLastDigit: Bool) -> String {
+        guard !(shouldRemoveLastDigit && phoneNumber.count <= 2) else {return "+"}
+        var number = phoneNumber.replacingOccurrences(of: "[^0-9]", with: "", options: .regularExpression)
+        if number.count > maxNumberCount {
+            let endIndex = number.index(number.startIndex, offsetBy: maxNumberCount)
+            number = String(number[number.startIndex..<endIndex])
         }
-        return pureNumber
+        
+        if shouldRemoveLastDigit {
+            let endIndex = number.index(number.startIndex, offsetBy: number.count - 1)
+            number = String(number[number.startIndex..<endIndex])
+        }
+        
+        let regRange = number.startIndex..<number.index(number.startIndex, offsetBy: number.count)
+        
+        if number.count < 7 {
+            number = number.replacingOccurrences(of: "(\\d{2})(\\d{2})(\\d+)",
+                                                 with: "$1-$2-$3",
+                                                 options: .regularExpression, range: regRange)
+        } else if number.count < 8 {
+            number = number.replacingOccurrences(of: "(\\d{3})(\\d{2})(\\d+)",
+                                                 with: "$1-$2-$3",
+                                                 options: .regularExpression, range: regRange)
+        } else {
+            number = number.replacingOccurrences(of: "(\\d)(\\d{3})(\\d{3})(\\d{2})(\\d+)",
+                                                 with: "+$1 ($2) $3-$4-$5",
+                                                 options: .regularExpression, range: regRange)
+        }
+        return number
     }
 }

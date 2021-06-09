@@ -37,7 +37,7 @@ extension ContactListCoordinator: ContactListViewModelDelegate {
     func contactListViewModelDidRequestAddContact() {
         let viewModel = ContactViewModel(with: nil)
         viewModel.createDelegate = self
-        let viewController = CreateContactViewController(viewModel: viewModel)
+        let viewController = ContactViewController(viewModel: viewModel)
         viewController.navigationItem.largeTitleDisplayMode = .never
         presenter.moveViewControllerFromBottom(viewController)
     }

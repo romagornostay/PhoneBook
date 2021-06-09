@@ -1,5 +1,5 @@
 //
-//  EditViewController.swift
+//  ContactViewController.swift
 //  PhoneBook
 //
 //  Created by SalemMacPro on 31.5.21.
@@ -9,11 +9,10 @@ import UIKit
 import SnapKit
 
 
-class EditViewController: UIViewController {
+class ContactViewController: UIViewController {
+    private let viewModel: ContactViewModel
     
-    private let viewModel: EditViewModel
-    
-    init(viewModel: EditViewModel) {
+    init(viewModel: ContactViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -22,11 +21,9 @@ class EditViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private let ringtones = ["Apex","Cosmic","Crystals","Popcorn","Pulse","Twinkle"]
-    
     private let textFieldName: UITextField = {
         let textField = UITextField()
-        textField.placeholder = LocalizationConstants.EditContact.firstName
+        textField.placeholder = LocalizationConstants.AddContact.firstName
         textField.returnKeyType = .next
         textField.becomeFirstResponder()
         textField.backgroundColor = .white
@@ -34,7 +31,7 @@ class EditViewController: UIViewController {
     }()
     private let textFieldLastName: UITextField = {
         let textField = UITextField()
-        textField.placeholder = LocalizationConstants.EditContact.lastName
+        textField.placeholder = LocalizationConstants.AddContact.lastName
         textField.returnKeyType = .next
         textField.backgroundColor = .white
         return textField
@@ -42,7 +39,8 @@ class EditViewController: UIViewController {
     
     private let phoneField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = LocalizationConstants.EditContact.mobilePhone
+        textField.placeholder = LocalizationConstants.AddContact.mobilePhone
+        //textField.textContentType = .telephoneNumber
         textField.keyboardType = .phonePad
         textField.returnKeyType = .next
         textField.backgroundColor = .white
@@ -51,29 +49,30 @@ class EditViewController: UIViewController {
     
     private let ringtoneLabel: UILabel = {
         var label = UILabel()
-        label.text = LocalizationConstants.EditContact.ringtone
+        label.text = LocalizationConstants.AddContact.ringtone
         label.font = .base1
         return label
     }()
     
     private let ringtoneField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = LocalizationConstants.EditContact.defaultRingtone
+        textField.placeholder = LocalizationConstants.AddContact.defaultRingtone
         textField.backgroundColor = .white
         textField.returnKeyType = .next
+        //textField.inputAccessoryView =
         return textField
     }()
     
     private let notesLabel: UILabel = {
         var label = UILabel()
-        label.text = LocalizationConstants.EditContact.notes
+        label.text = LocalizationConstants.AddContact.notes
         label.font = .base1
         return label
     }()
     
     private let notesField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = LocalizationConstants.EditContact.someNotes
+        textField.placeholder = LocalizationConstants.AddContact.someNotes
         textField.backgroundColor = .white
         textField.returnKeyType = .done
         return textField
@@ -93,18 +92,33 @@ class EditViewController: UIViewController {
     private let divider4 = UILabel()
     private let divider5 = UILabel()
     
+    
+    private lazy var newContact: ContactData = {
+        
+        let name = textFieldName.text
+        let lastName = textFieldLastName.text ?? ""
+        let phone = phoneField.text
+        let ringtone = ringtoneField.text
+        let notes = notesField.text
+        let contact = ContactData(id: nil, firstName: name, lastName: lastName, phone: phone, ringtone: ringtone, notes: notes, avatar: avatarView.image)
+        return contact
+    }()
+    
     private let avatarView: UIImageView = {
         let image = UIImageView()
         image.image = Images.userImage
+        image.tintColor = .lightGray
         image.contentMode = .scaleToFill
         image.layer.cornerRadius = 45
         image.backgroundColor = .white
         return image
     }()
     
+    private let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: nil, action: nil)
+    
     private let addPhotoButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle(LocalizationConstants.EditContact.addPhotoButton, for: .normal)
+        button.setTitle(LocalizationConstants.AddContact.addPhotoButton, for: .normal)
         return button
     }()
     
@@ -114,8 +128,10 @@ class EditViewController: UIViewController {
         return button
     }()
     
-    private let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneTapped))
-    private let cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelTapped))
+   
+    
+   
+   
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -129,41 +145,53 @@ class EditViewController: UIViewController {
         
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        doneButton.isEnabled = textFieldName.text == nil
+    }
+    
+    
+    
     private func setupContactData() {
-        let currentContact = viewModel.contact
-        textFieldName.text = currentContact.firstName
-        textFieldLastName.text =  currentContact.lastName
-        phoneField.text = currentContact.phone
-        ringtoneField.text = currentContact.ringtone
-        notesField.text = currentContact.notes
-        avatarView.image = currentContact.avatar
-        avatarView.layer.masksToBounds = true
-
+        if let currentContact = viewModel.contact {
+            textFieldName.text = currentContact.firstName
+            textFieldLastName.text =  currentContact.lastName
+            phoneField.text = currentContact.phone
+            ringtoneField.text = currentContact.ringtone
+            notesField.text = currentContact.notes
+            avatarView.image = currentContact.avatar
+            avatarView.layer.masksToBounds = true
+        }
     }
     
     
     private func setupNavigationItems() {
+        doneButton.target = self
+        doneButton.action = #selector(doneTapped)
         navigationItem.rightBarButtonItem = doneButton
-        navigationItem.leftBarButtonItem = cancelButton
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelTapped))
+        
     }
     
     @objc
     private func doneTapped() {
-        var currentContact = viewModel.contact
-        currentContact.firstName = textFieldName.text!
-        currentContact.lastName = textFieldLastName.text ?? ""
-        currentContact.phone = phoneField.text!
-        currentContact.ringtone = ringtoneField.text ?? "Default"
-        currentContact.notes = notesField.text ?? "Wake up, Neo…"
-        currentContact.avatar = avatarView.image
-        viewModel.saveContact(currentContact)
-        
+        if var currentContact = viewModel.contact {
+            currentContact.firstName = textFieldName.text!
+            currentContact.lastName = textFieldLastName.text ?? " "
+            currentContact.phone = phoneField.text!
+            currentContact.ringtone = ringtoneField.text ?? "Default"
+            currentContact.notes = notesField.text ?? "Wake up, Neo…"
+            currentContact.avatar = avatarView.image
+            viewModel.updateContact(currentContact)
+        } else {
+            print("--NewAdd---")
+            viewModel.addContact(newContact)
+           
+        }
     }
-    
     
     @objc
     private func cancelTapped() {
-        navigationController?.popViewController(animated: false)
+        navigationController?.popViewControllerToBottom()
     }
     
     private func setupTextFields() {
@@ -172,15 +200,16 @@ class EditViewController: UIViewController {
         phoneField.delegate = self
         ringtoneField.delegate = self
         notesField.delegate = self
-        addInputAccessoryForTextFields([phoneField,ringtoneField,notesField])
+        addInputAccessoryForTextFields([phoneField,ringtoneField, notesField])
     }
     
     func addInputAccessoryForTextFields(_ textFields: [UITextField]) {
         for (index, textField) in textFields.enumerated() {
             let toolbar: UIToolbar = UIToolbar()
             toolbar.sizeToFit()
+            
             var items = [UIBarButtonItem]()
-            let nextButton = UIBarButtonItem(title: LocalizationConstants.EditContact.nextButton, style: .plain, target: nil, action: nil)
+            let nextButton = UIBarButtonItem(title: LocalizationConstants.AddContact.nextButton, style: .plain, target: nil, action: nil)
             if textField == textFields.last {
                 nextButton.isEnabled = false
             } else {
@@ -190,11 +219,14 @@ class EditViewController: UIViewController {
             items.append(contentsOf: [nextButton])
             
             let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-            let doneBut = UIBarButtonItem(title: LocalizationConstants.EditContact.doneButton, style: .plain, target: view, action: #selector(UIView.endEditing))
-            items.append(contentsOf: [spacer, doneBut])
-            
+            let doneButton = UIBarButtonItem(title: LocalizationConstants.AddContact.doneButton, style: .plain, target: view, action: #selector(UIView.endEditing))
+            items.append(contentsOf: [spacer, doneButton])
             toolbar.setItems(items, animated: false)
-            textField.inputAccessoryView = toolbar
+            if textField == textFields.last {
+                toolbar.isHidden = true
+            } else {
+                textField.inputAccessoryView = toolbar
+            }
         }
     }
     
@@ -222,17 +254,12 @@ class EditViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "Camera", style: .default, handler: { _ in
             self.openCamera()
         }))
-        
         alert.addAction(UIAlertAction(title: "Gallery", style: .default, handler: { _ in
             self.openPhotos()
         }))
-        
         alert.addAction(UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil))
         
         self.present(alert, animated: true, completion: nil)
-        
-        
-        print("Choose image!!!")
     }
     
     func openCamera() {
@@ -283,7 +310,6 @@ class EditViewController: UIViewController {
             make.leading.equalTo(25)
         }
         addPhotoButton.addTarget(self, action: #selector(imageTapped), for: .touchUpInside)
-        
         
         view.addSubview(textFieldName)
         textFieldName.snp.makeConstraints { make in
@@ -375,7 +401,6 @@ class EditViewController: UIViewController {
             make.leading.trailing.equalTo(notesField)
             make.height.equalTo(1)
         }
-        
         view.addSubview(deleteButton)
         deleteButton.snp.makeConstraints { (make) in
             make.bottom.equalTo(-400)
@@ -388,12 +413,24 @@ class EditViewController: UIViewController {
     private func deleteTapped() {
         viewModel.deleteContact()
     }
-    
 }
 
-
 //MARK:-- UITextFieldDelegate
-extension EditViewController: UITextFieldDelegate {
+extension ContactViewController: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if textField == phoneField {
+            let fullString = (phoneField.text ?? "") + string
+            textField.text = viewModel.formatNumber(phoneNumber: fullString, shouldRemoveLastDigit: range.length == 1)
+            return false
+        }
+        if textField == textFieldName {
+           let nameLength = (textField.text?.count ?? 0) - range.length + string.count
+            doneButton.isEnabled = nameLength > 0
+        }
+       
+        return true
+    }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         switch textField {
         case textFieldName:
@@ -410,45 +447,36 @@ extension EditViewController: UITextFieldDelegate {
             textField.resignFirstResponder()
         }
         return false
-        
-        //textField.resignFirstResponder()
-        //viewModel.contactListViewModelDidRequestAddContact(newContact)
-        //return true
     }
 }
 //MARK:-- UIPickerViewDelegate
-extension EditViewController: UIPickerViewDelegate {
+extension ContactViewController: UIPickerViewDelegate {
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return ringtones[row]
+        return Constants.ringtones[row]
     }
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        ringtoneField.text = ringtones[row]
+        ringtoneField.text = Constants.ringtones[row]
     }
 }
 //MARK:-- UIPickerViewDataSource
-extension EditViewController: UIPickerViewDataSource {
+extension ContactViewController: UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         1
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        ringtones.count
+        Constants.ringtones.count
     }
 }
 
 //MARK:-- ImagePicker delegate
-extension EditViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+extension ContactViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let pickedImage = info[.originalImage] as? UIImage {
             avatarView.image = pickedImage
             avatarView.layer.masksToBounds = true
-            
         }
         picker.dismiss(animated: true, completion: nil)
     }
     
 }
-
-
-
-

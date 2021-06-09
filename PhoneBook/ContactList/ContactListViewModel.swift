@@ -49,7 +49,7 @@ final class ContactListViewModel {
         print("OPEN---2--")
     }
     
-    func openViewAddContact() {
+    func addContact() {
         delegate?.contactListViewModelDidRequestAddContact()
         print("AddContact---2--")
     }

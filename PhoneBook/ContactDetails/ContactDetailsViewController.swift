@@ -61,28 +61,12 @@ class ContactDetailsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         //setupLayout()
-        view.addSubview(tableView)
-        tableView.frame = view.bounds
-        tableView.delegate = self
-        tableView.dataSource = self
-        let headerView = StretchyTableHeaderView(frame: CGRect(x: 0, y: 0,
-                                                               width: view.frame.size.width,
-                                                               height: view.frame.size.width/3))
-        let model = viewModel.contact
-        headerView.configure(name: model.firstName, lastName: model.lastName, avatar: model.avatar)
-        //headerView.avatarView.image = viewModel.contact.avatar
-        //headerView.avatarView.frame.size.width = headerView.avatarView.frame.size.height
-        //headerView.avatarView.layer.cornerRadius = headerView.frame.width
-        //headerView.avatarView.layer.masksToBounds = true
-        
-        
-        tableView.tableHeaderView = headerView
+        setupTableView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setupNavigationItems()
-
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -93,13 +77,27 @@ class ContactDetailsViewController: UIViewController {
         navigationController?.navigationBar.shadowImage = nil
     }
     
+    private func setupTableView() {
+        view.addSubview(tableView)
+        tableView.frame = view.bounds
+        let headerView = StretchyTableHeaderView(frame: CGRect(x: 0, y: 0,
+                                                               width: view.frame.size.width,
+                                                               height: view.frame.size.width/3))
+        let contact = viewModel.contact
+        headerView.configure(name: contact.firstName, lastName: contact.lastName, avatar: contact.avatar)
+        print(view.bounds.width)
+        tableView.tableHeaderView = headerView
+        tableView.delegate = self
+        tableView.dataSource = self
+    }
+    
     private func setupLayout() {
         let currentContact = viewModel.contact
         image.image = currentContact.avatar
-        nameLabel.text = currentContact.firstName + " " + currentContact.lastName
-        phoneView.configure(title: LocalizationConstants.ContactDetails.phone, description: currentContact.phone)
-        ringtoneView.configure(title: LocalizationConstants.ContactDetails.ringtone, description: currentContact.ringtone)
-        notesView.configure(title: LocalizationConstants.ContactDetails.notes, description: currentContact.notes)
+        //nameLabel.text = currentContact.firstName + " " + currentContact.lastName
+       // phoneView.configure(title: LocalizationConstants.ContactDetails.phone, description: currentContact.phone)
+        //ringtoneView.configure(title: LocalizationConstants.ContactDetails.ringtone, description: currentContact.ringtone)
+        //notesView.configure(title: LocalizationConstants.ContactDetails.notes, description: currentContact.notes)
         
         view.addSubview(extendedView)
         extendedView.snp.makeConstraints { make in
@@ -194,20 +192,13 @@ extension ContactDetailsViewController: UITableViewDelegate, UITableViewDataSour
         let cell = tableView.dequeueReusableCell(withIdentifier: ContactDetailTableViewCell.identifier, for: indexPath) as! ContactDetailTableViewCell
         let currentContact = viewModel.contact
         switch indexPath.row {
-        case 0:
-            cell.configure(title: LocalizationConstants.ContactDetails.phone, description: currentContact.phone, textColor: .base3)
-        case 1:
-            cell.configure(title: LocalizationConstants.ContactDetails.ringtone, description: currentContact.ringtone, textColor: .black)
-        case 2:
-            cell.configure(title: LocalizationConstants.ContactDetails.notes, description: currentContact.notes, textColor: .black)
-        default:
-            break
+        case 0: cell.configure(title: LocalizationConstants.ContactDetails.phone, description: currentContact.phone ?? " ", textColor: .base3)
+        case 1: cell.configure(title: LocalizationConstants.ContactDetails.ringtone, description: currentContact.ringtone ?? "Default", textColor: .black)
+        case 2: cell.configure(title: LocalizationConstants.ContactDetails.notes, description: currentContact.notes ?? "Wake up, Neo…", textColor: .black)
+        default: break
         }
-        
         return cell
     }
-    
-    
 }
 
 extension ContactDetailsViewController: UIScrollViewDelegate {
