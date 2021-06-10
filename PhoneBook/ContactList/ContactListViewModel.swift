@@ -46,12 +46,10 @@ final class ContactListViewModel {
     
     func showContactDetails(for contact: ContactData) {
         delegate?.contactListViewModelDidRequestShowContactDetails(contact)
-        print("OPEN---2--")
     }
     
     func addContact() {
         delegate?.contactListViewModelDidRequestAddContact()
-        print("AddContact---2--")
     }
     
     func addContact(_ contact: ContactData) {

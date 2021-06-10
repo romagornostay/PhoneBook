@@ -20,63 +20,12 @@ class ContactViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    private let nameView = ContactSomeDetailCellView()
+    private let lastNameView = ContactSomeDetailCellView()
+    private let phoneView = ContactSomeDetailCellView()
+    private let ringtoneView = ContactSomeDetailCellView()
+    private let notesV = ContactSomeDetailCellView()
     
-    private let textFieldName: UITextField = {
-        let textField = UITextField()
-        textField.placeholder = LocalizationConstants.AddContact.firstName
-        textField.returnKeyType = .next
-        textField.becomeFirstResponder()
-        textField.backgroundColor = .white
-        return textField
-    }()
-    private let textFieldLastName: UITextField = {
-        let textField = UITextField()
-        textField.placeholder = LocalizationConstants.AddContact.lastName
-        textField.returnKeyType = .next
-        textField.backgroundColor = .white
-        return textField
-    }()
-    
-    private let phoneField: UITextField = {
-        let textField = UITextField()
-        textField.placeholder = LocalizationConstants.AddContact.mobilePhone
-        //textField.textContentType = .telephoneNumber
-        textField.keyboardType = .phonePad
-        textField.returnKeyType = .next
-        textField.backgroundColor = .white
-        return textField
-    }()
-    
-    private let ringtoneLabel: UILabel = {
-        var label = UILabel()
-        label.text = LocalizationConstants.AddContact.ringtone
-        label.font = .base1
-        return label
-    }()
-    
-    private let ringtoneField: UITextField = {
-        let textField = UITextField()
-        textField.placeholder = LocalizationConstants.AddContact.defaultRingtone
-        textField.backgroundColor = .white
-        textField.returnKeyType = .next
-        //textField.inputAccessoryView =
-        return textField
-    }()
-    
-    private let notesLabel: UILabel = {
-        var label = UILabel()
-        label.text = LocalizationConstants.AddContact.notes
-        label.font = .base1
-        return label
-    }()
-    
-    private let notesField: UITextField = {
-        let textField = UITextField()
-        textField.placeholder = LocalizationConstants.AddContact.someNotes
-        textField.backgroundColor = .white
-        textField.returnKeyType = .done
-        return textField
-    }()
     
     private let ringtonePicker: UIPickerView = {
         let picker = UIPickerView()
@@ -86,29 +35,14 @@ class ContactViewController: UIViewController {
     
     private let imagePicker = UIImagePickerController()
     
-    private let divider1 = UILabel()
-    private let divider2 = UILabel()
-    private let divider3 = UILabel()
-    private let divider4 = UILabel()
-    private let divider5 = UILabel()
+    private let chosenImage = UIImageView()
     
     
-    private lazy var newContact: ContactData = {
-        
-        let name = textFieldName.text
-        let lastName = textFieldLastName.text ?? ""
-        let phone = phoneField.text
-        let ringtone = ringtoneField.text
-        let notes = notesField.text
-        let contact = ContactData(id: nil, firstName: name, lastName: lastName, phone: phone, ringtone: ringtone, notes: notes, avatar: avatarView.image)
-        return contact
-    }()
     
     private let avatarView: UIImageView = {
         let image = UIImageView()
-        image.image = Images.userImage
-        image.tintColor = .lightGray
-        image.contentMode = .scaleToFill
+        image.image = Images.addImage
+        image.contentMode = .scaleAspectFill
         image.layer.cornerRadius = 45
         image.backgroundColor = .white
         return image
@@ -128,37 +62,148 @@ class ContactViewController: UIViewController {
         return button
     }()
     
-   
+    private lazy var newContact: ContactData = {
+        let name = nameView.textField.text
+        let lastName = lastNameView.textField.text ?? ""
+        let phone = phoneView.textField.text
+        let ringtone = ringtoneView.textField.text
+        let notes = notesV.textField.text
+        let contact = ContactData(id: nil, firstName: name, lastName: lastName, phone: phone, ringtone: ringtone, notes: notes, avatar: chosenImage.image)
+        return contact
+    }()
     
    
-   
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupNavigationItems()
-        setupLayout()
+        
+        setupContactImage()
+        setupFirstNameView()
+        setupLastNameView()
+        setupPhoneNumberView()
+        setupRingtoneView()
+        setupNotesView()
+        
         setupTextFields()
         setupRingtonePicker()
         setupMissKeyboardTapGesture()
         setupContactData()
+        setupDeleteButton()
         
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        doneButton.isEnabled = textFieldName.text == nil
+        doneButton.isEnabled = nameView.textField.text == nil
     }
     
+    private func setupContactImage() {
+        view.backgroundColor = .white
+        view.addSubview(avatarView)
+        avatarView.isUserInteractionEnabled = true
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped))
+        avatarView.addGestureRecognizer(tapRecognizer)
+        
+        avatarView.center = view.center
+        avatarView.snp.makeConstraints { make in
+            make.topMargin.equalTo(16)
+            make.leading.equalTo(16)
+            make.width.height.equalTo(90)
+        }
+        
+        view.addSubview(addPhotoButton)
+        addPhotoButton.snp.makeConstraints { make in
+            make.top.equalTo(avatarView.snp.bottom)//.inset(8)
+            make.leading.equalTo(25)
+        }
+        addPhotoButton.addTarget(self, action: #selector(imageTapped), for: .touchUpInside)
+    }
+    
+    private func setupFirstNameView() {
+        view.addSubview(nameView)
+        nameView.textField.placeholder = LocalizationConstants.AddContact.firstName
+        nameView.textField.becomeFirstResponder()
+
+        nameView.snp.makeConstraints { make in
+            make.topMargin.equalTo(15)
+            make.leading.equalTo(avatarView.snp.trailing).offset(16)
+            make.trailing.equalToSuperview()
+        }
+    }
+    private func setupLastNameView() {
+        view.addSubview(lastNameView)
+        lastNameView.textField.placeholder = LocalizationConstants.AddContact.lastName
+
+        lastNameView.snp.makeConstraints { make in
+            make.top.equalTo(nameView.snp.bottom).offset(15)
+            make.leading.trailing.equalTo(nameView)
+        }
+    }
+
+    private func setupPhoneNumberView() {
+        view.addSubview(phoneView)
+        phoneView.textField.placeholder = LocalizationConstants.AddContact.mobilePhone
+        phoneView.textField.keyboardType = .phonePad
+
+        phoneView.snp.makeConstraints { make in
+            make.top.equalTo(lastNameView.snp.bottom).offset(40)
+            make.leading.equalTo(20)
+            make.trailing.equalToSuperview()
+        }
+    }
+    
+    private func setupRingtoneView() {
+        view.addSubview(ringtoneView)
+        ringtoneView.titleLabel.text = LocalizationConstants.AddContact.ringtone
+        ringtoneView.textField.placeholder = LocalizationConstants.AddContact.defaultRingtone
+
+        ringtoneView.snp.makeConstraints { make in
+            make.top.equalTo(phoneView.snp.bottom).offset(15)
+            make.leading.trailing.equalTo(phoneView)
+        }
+    }
+    
+    private func setupNotesView() {
+        view.addSubview(notesV)
+        notesV.titleLabel.text = LocalizationConstants.AddContact.notes
+        notesV.textField.returnKeyType = .done
+
+        notesV.snp.makeConstraints { (make) in
+            make.top.equalTo(ringtoneView.snp.bottom).offset(15)
+            make.leading.trailing.equalTo(ringtoneView)
+        }
+    }
+    
+
+    
+    private func setupDeleteButton() {
+        guard viewModel.contact != nil else { return }
+        view.addSubview(deleteButton)
+        deleteButton.snp.makeConstraints { (make) in
+            make.top.equalTo(notesV.snp.bottom).offset(10)
+            make.centerX.equalToSuperview()
+            
+        }
+        deleteButton.addTarget(self, action: #selector(deleteTapped), for: .touchUpInside)
+    }
+    @objc
+    private func deleteTapped() {
+        viewModel.deleteContact()
+    }
     
     
     private func setupContactData() {
         if let currentContact = viewModel.contact {
-            textFieldName.text = currentContact.firstName
-            textFieldLastName.text =  currentContact.lastName
-            phoneField.text = currentContact.phone
-            ringtoneField.text = currentContact.ringtone
-            notesField.text = currentContact.notes
-            avatarView.image = currentContact.avatar
+            nameView.textField.text = currentContact.firstName
+            lastNameView.textField.text =  currentContact.lastName
+            phoneView.textField.text = currentContact.phone
+            ringtoneView.textField.text = currentContact.ringtone
+            notesV.textField.text = currentContact.notes
+            if let contactImage = currentContact.avatar {
+                avatarView.image = contactImage
+            } else {
+                avatarView.image = Images.addImage
+            }
             avatarView.layer.masksToBounds = true
         }
     }
@@ -175,17 +220,15 @@ class ContactViewController: UIViewController {
     @objc
     private func doneTapped() {
         if var currentContact = viewModel.contact {
-            currentContact.firstName = textFieldName.text!
-            currentContact.lastName = textFieldLastName.text ?? " "
-            currentContact.phone = phoneField.text!
-            currentContact.ringtone = ringtoneField.text ?? "Default"
-            currentContact.notes = notesField.text ?? "Wake up, Neo…"
-            currentContact.avatar = avatarView.image
+            currentContact.firstName = nameView.textField.text
+            currentContact.lastName = lastNameView.textField.text ?? " "
+            currentContact.phone = phoneView.textField.text
+            currentContact.ringtone = ringtoneView.textField.text
+            currentContact.notes = notesV.textField.text
+            currentContact.avatar = chosenImage.image
             viewModel.updateContact(currentContact)
         } else {
-            print("--NewAdd---")
             viewModel.addContact(newContact)
-           
         }
     }
     
@@ -195,12 +238,12 @@ class ContactViewController: UIViewController {
     }
     
     private func setupTextFields() {
-        textFieldName.delegate = self
-        textFieldLastName.delegate = self
-        phoneField.delegate = self
-        ringtoneField.delegate = self
-        notesField.delegate = self
-        addInputAccessoryForTextFields([phoneField,ringtoneField, notesField])
+        nameView.textField.delegate = self
+        lastNameView.textField.delegate = self
+        phoneView.textField.delegate = self
+        ringtoneView.textField.delegate = self
+        notesV.textField.delegate = self
+        addInputAccessoryForTextFields([phoneView.textField, ringtoneView.textField, notesV.textField])
     }
     
     func addInputAccessoryForTextFields(_ textFields: [UITextField]) {
@@ -234,7 +277,7 @@ class ContactViewController: UIViewController {
     private func setupRingtonePicker() {
         ringtonePicker.delegate = self
         ringtonePicker.dataSource = self
-        ringtoneField.inputView = ringtonePicker
+        ringtoneView.textField.inputView = ringtonePicker
     }
     
     private func setupMissKeyboardTapGesture() {
@@ -287,143 +330,17 @@ class ContactViewController: UIViewController {
             self.present(alert, animated: true, completion: nil)
         }
     }
-    
-    private func setupLayout() {
-        
-        view.backgroundColor = .white
-        view.addSubview(avatarView)
-        
-        avatarView.isUserInteractionEnabled = true
-        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped))
-        avatarView.addGestureRecognizer(tapRecognizer)
-        
-        avatarView.center = view.center
-        avatarView.snp.makeConstraints { make in
-            make.topMargin.equalTo(16)
-            make.leading.equalTo(16)
-            make.width.height.equalTo(90)
-        }
-        
-        view.addSubview(addPhotoButton)
-        addPhotoButton.snp.makeConstraints { make in
-            make.top.equalTo(avatarView.snp.bottom).inset(8)
-            make.leading.equalTo(25)
-        }
-        addPhotoButton.addTarget(self, action: #selector(imageTapped), for: .touchUpInside)
-        
-        view.addSubview(textFieldName)
-        textFieldName.snp.makeConstraints { make in
-            make.topMargin.equalTo(25)
-            make.leading.equalTo(avatarView.snp.trailing).offset(16)
-            make.trailing.equalToSuperview()
-            make.height.equalTo(22)
-        }
-        
-        view.addSubview(divider1)
-        divider1.layer.backgroundColor = UIColor.base1.cgColor
-        divider1.snp.makeConstraints { make in
-            make.top.equalTo(textFieldName.snp.bottom).offset(3)
-            make.leading.trailing.equalTo(textFieldName)
-            make.height.equalTo(1)
-        }
-        
-        view.addSubview(textFieldLastName)
-        textFieldLastName.snp.makeConstraints { make in
-            make.top.equalTo(textFieldName.snp.bottom).offset(25)
-            make.leading.trailing.equalTo(textFieldName)
-            make.height.equalTo(22)
-        }
-        
-        view.addSubview(divider2)
-        divider2.layer.backgroundColor = UIColor.base1.cgColor
-        divider2.snp.makeConstraints { (make) in
-            make.top.equalTo(textFieldLastName.snp.bottom).offset(3)
-            make.leading.trailing.equalTo(textFieldLastName)
-            make.height.equalTo(1)
-        }
-        
-        view.addSubview(phoneField)
-        phoneField.snp.makeConstraints { (make) in
-            make.top.equalTo(textFieldLastName.snp.bottom).offset(40)
-            make.leading.equalTo(20)
-            make.trailing.equalToSuperview()
-            make.height.equalTo(22)
-        }
-        
-        view.addSubview(divider3)
-        divider3.layer.backgroundColor = UIColor.base1.cgColor
-        divider3.snp.makeConstraints { (make) in
-            make.top.equalTo(phoneField.snp.bottom).offset(3)
-            make.leading.trailing.equalTo(phoneField)
-            make.height.equalTo(1)
-        }
-        
-        view.addSubview(ringtoneLabel)
-        ringtoneLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(phoneField.snp.bottom).offset(10)
-            make.leading.trailing.equalTo(phoneField)
-            make.height.equalTo(22)
-        }
-        
-        view.addSubview(ringtoneField)
-        ringtoneField.snp.makeConstraints { (make) in
-            make.top.equalTo(ringtoneLabel.snp.bottom).offset(10)
-            make.leading.trailing.equalTo(ringtoneLabel)
-            make.height.equalTo(22)
-        }
-        
-        view.addSubview(divider4)
-        divider4.layer.backgroundColor = UIColor.base1.cgColor
-        divider4.snp.makeConstraints { (make) in
-            make.top.equalTo(ringtoneField.snp.bottom).offset(3)
-            make.leading.trailing.equalTo(ringtoneField)
-            make.height.equalTo(1)
-        }
-        
-        
-        view.addSubview(notesLabel)
-        notesLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(ringtoneField.snp.bottom).offset(10)
-            make.leading.trailing.equalTo(ringtoneField)
-            make.height.equalTo(22)
-        }
-        
-        view.addSubview(notesField)
-        notesField.snp.makeConstraints { (make) in
-            make.top.equalTo(notesLabel.snp.bottom).offset(10)
-            make.leading.trailing.equalTo(notesLabel)
-            make.height.equalTo(22)
-        }
-        view.addSubview(divider5)
-        divider5.layer.backgroundColor = UIColor.base1.cgColor
-        divider5.snp.makeConstraints { (make) in
-            make.top.equalTo(notesField.snp.bottom).offset(3)
-            make.leading.trailing.equalTo(notesField)
-            make.height.equalTo(1)
-        }
-        view.addSubview(deleteButton)
-        deleteButton.snp.makeConstraints { (make) in
-            make.bottom.equalTo(-400)
-            make.leading.equalTo(20)
-            
-        }
-        deleteButton.addTarget(self, action: #selector(deleteTapped), for: .touchUpInside)
-    }
-    @objc
-    private func deleteTapped() {
-        viewModel.deleteContact()
-    }
 }
 
 //MARK:-- UITextFieldDelegate
 extension ContactViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        if textField == phoneField {
-            let fullString = (phoneField.text ?? "") + string
+        if textField == phoneView.textField {
+            let fullString = (phoneView.textField.text ?? "") + string
             textField.text = viewModel.formatNumber(phoneNumber: fullString, shouldRemoveLastDigit: range.length == 1)
             return false
         }
-        if textField == textFieldName {
+        if textField == nameView.textField {
            let nameLength = (textField.text?.count ?? 0) - range.length + string.count
             doneButton.isEnabled = nameLength > 0
         }
@@ -433,16 +350,16 @@ extension ContactViewController: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         switch textField {
-        case textFieldName:
-            textFieldLastName.becomeFirstResponder()
-        case textFieldLastName:
-            phoneField.becomeFirstResponder()
-        case phoneField:
-            ringtoneField.becomeFirstResponder()
-        case ringtoneField:
-            notesField.becomeFirstResponder()
-        case notesField:
-            notesField.resignFirstResponder()
+        case nameView.textField:
+            lastNameView.textField.becomeFirstResponder()
+        case lastNameView.textField:
+            phoneView.textField.becomeFirstResponder()
+        case phoneView.textField:
+            ringtoneView.textField.becomeFirstResponder()
+        case ringtoneView.textField:
+            notesV.textField.becomeFirstResponder()
+        case notesV.textField:
+            notesV.textField.resignFirstResponder()
         default:
             textField.resignFirstResponder()
         }
@@ -455,7 +372,7 @@ extension ContactViewController: UIPickerViewDelegate {
         return Constants.ringtones[row]
     }
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        ringtoneField.text = Constants.ringtones[row]
+        ringtoneView.textField.text = Constants.ringtones[row]
     }
 }
 //MARK:-- UIPickerViewDataSource
@@ -473,7 +390,8 @@ extension ContactViewController: UIPickerViewDataSource {
 extension ContactViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let pickedImage = info[.originalImage] as? UIImage {
-            avatarView.image = pickedImage
+            chosenImage.image = pickedImage
+            avatarView.image = chosenImage.image
             avatarView.layer.masksToBounds = true
         }
         picker.dismiss(animated: true, completion: nil)

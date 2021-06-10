@@ -15,7 +15,7 @@
 
 "FIRST.NAME" = "First name";
 "LAST.NAME" = "Last name";
-"MOBILE.PHONE" = "mobile";
+"MOBILE.PHONE" = "Phone number";
 "RINGTONE" = "Ringtone";
 "DEFAULT" = "Default";
 "NOTES.TITLE" = "Notes";

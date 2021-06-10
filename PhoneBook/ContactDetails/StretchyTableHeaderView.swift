@@ -18,32 +18,24 @@ final class StretchyTableHeaderView: UIView {
 //        //image.layer.masksToBounds = true
 //        return image
 //    }()
-    let image: UIImageView = {
+    lazy var image: UIImageView = {
         let image = UIImageView()
         image.image = Images.userImage
         image.tintColor = .gray
-        image.contentMode = .scaleToFill
+        image.contentMode = .scaleAspectFill
         image.layer.masksToBounds = true
         return image
     }()
     
     private let nameLabel: UILabel = {
         let label = UILabel()
-        label.text = "Thomas"
         label.textAlignment = .center
         label.font = .base3
-        label.layer.masksToBounds = true
+        label.numberOfLines = 0
+        label.adjustsFontSizeToFitWidth = true
         return label
     }()
     
-    private let lastNameLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Anderson"
-        label.textAlignment = .center
-        label.font = .base3
-        label.layer.masksToBounds = true
-        return label
-    }()
     
     let avatarView: UIView = {
         let view = UIView()
@@ -59,9 +51,12 @@ final class StretchyTableHeaderView: UIView {
     
     
     func configure(name: String?, lastName: String?, avatar: UIImage?) {
-        nameLabel.text = name
-        lastNameLabel.text = lastName
-        image.image = avatar
+        nameLabel.text = (name ?? "") + " " + (lastName ?? "")
+        if let contactImage = avatar {
+            image.image = contactImage
+        } else {
+            image.image = Images.userImage
+        }
     }
     
     
@@ -90,7 +85,6 @@ final class StretchyTableHeaderView: UIView {
         image.snp.makeConstraints { make in
             make.centerY.equalTo(avatarView.snp.centerY)
             make.size.equalTo(avatarView.snp.height).multipliedBy(0.4)
-            make.bottom.equalTo(-80)
             make.centerX.equalToSuperview()
             
         }
@@ -98,15 +92,10 @@ final class StretchyTableHeaderView: UIView {
         containerView.addSubview(nameLabel)
         nameLabel.snp.makeConstraints { make in
             make.top.equalTo(image.snp.bottom)
-            make.trailing.equalTo(containerView.snp.centerX).inset(10)
+            make.centerX.equalToSuperview()
+            make.leading.trailing.bottom.equalToSuperview().inset(16)
         }
-        
-        containerView.addSubview(lastNameLabel)
-        lastNameLabel.snp.makeConstraints { make in
-            make.top.equalTo(image.snp.bottom)
-            make.leading.equalTo(nameLabel.snp.trailing).offset(10)
-        }
-        
+       
         
         NSLayoutConstraint.activate([
             widthAnchor.constraint(equalTo: containerView.widthAnchor),
@@ -136,6 +125,7 @@ final class StretchyTableHeaderView: UIView {
         avatarViewHeight.constant = max(offsetY + scrollView.contentInset.top, scrollView.contentInset.top)
         
         image.layer.cornerRadius = image.bounds.height/2
+
         print(image.bounds.height/2)
         print(image.frame.size.height/2)
     }

@@ -24,7 +24,6 @@
 		77668F8C26640F82007C6F25 /* ContactDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77668F8B26640F82007C6F25 /* ContactDetailsViewModel.swift */; };
 		77668F9126640FE9007C6F25 /* ContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77668F9026640FE9007C6F25 /* ContactViewController.swift */; };
 		77668F9526641036007C6F25 /* ContactViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77668F9426641036007C6F25 /* ContactViewModel.swift */; };
-		77668F9926641081007C6F25 /* EditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77668F9826641081007C6F25 /* EditViewController.swift */; };
 		77668FA1266410FC007C6F25 /* ContactData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77668FA0266410FC007C6F25 /* ContactData.swift */; };
 		77668FA526641139007C6F25 /* ImageStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77668FA426641139007C6F25 /* ImageStorage.swift */; };
 		77668FA8266411B2007C6F25 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77668FA7266411B2007C6F25 /* CoreDataManager.swift */; };
@@ -41,6 +40,7 @@
 		77668FE126675D9E007C6F25 /* StretchyTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77668FE026675D9D007C6F25 /* StretchyTableHeaderView.swift */; };
 		77668FE62667698C007C6F25 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 77668FE52667698C007C6F25 /* SnapKit */; };
 		77668FFB2667FD89007C6F25 /* ContactDetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77668FFA2667FD88007C6F25 /* ContactDetailTableViewCell.swift */; };
+		776FC4E02671E8CF00996C37 /* ContactSomeDetailCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 776FC4DF2671E8CF00996C37 /* ContactSomeDetailCellView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -63,7 +63,6 @@
 		77668F8B26640F82007C6F25 /* ContactDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactDetailsViewModel.swift; sourceTree = "<group>"; };
 		77668F9026640FE9007C6F25 /* ContactViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactViewController.swift; sourceTree = "<group>"; };
 		77668F9426641036007C6F25 /* ContactViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactViewModel.swift; sourceTree = "<group>"; };
-		77668F9826641081007C6F25 /* EditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditViewController.swift; sourceTree = "<group>"; };
 		77668FA0266410FC007C6F25 /* ContactData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactData.swift; sourceTree = "<group>"; };
 		77668FA426641139007C6F25 /* ImageStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStorage.swift; sourceTree = "<group>"; };
 		77668FA7266411B2007C6F25 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
@@ -79,6 +78,7 @@
 		77668FDB2665EEA3007C6F25 /* UINavigationController+CustomTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationController+CustomTransition.swift"; sourceTree = "<group>"; };
 		77668FE026675D9D007C6F25 /* StretchyTableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StretchyTableHeaderView.swift; sourceTree = "<group>"; };
 		77668FFA2667FD88007C6F25 /* ContactDetailTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactDetailTableViewCell.swift; sourceTree = "<group>"; };
+		776FC4DF2671E8CF00996C37 /* ContactSomeDetailCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactSomeDetailCellView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,7 +125,6 @@
 				77668F8326640F0A007C6F25 /* ContactList */,
 				77668F8E26640FBB007C6F25 /* ContactDetails */,
 				77668F972664104F007C6F25 /* AddContact */,
-				77668F9F266410AF007C6F25 /* !!!EditContact!!! */,
 				77668F6B26640CBE007C6F25 /* Assets.xcassets */,
 				77668F6D26640CBE007C6F25 /* LaunchScreen.storyboard */,
 				77668F7026640CBE007C6F25 /* Info.plist */,
@@ -162,17 +161,10 @@
 			isa = PBXGroup;
 			children = (
 				77668F9026640FE9007C6F25 /* ContactViewController.swift */,
+				776FC4DF2671E8CF00996C37 /* ContactSomeDetailCellView.swift */,
 				77668F9426641036007C6F25 /* ContactViewModel.swift */,
 			);
 			path = AddContact;
-			sourceTree = "<group>";
-		};
-		77668F9F266410AF007C6F25 /* !!!EditContact!!! */ = {
-			isa = PBXGroup;
-			children = (
-				77668F9826641081007C6F25 /* EditViewController.swift */,
-			);
-			path = "!!!EditContact!!!";
 			sourceTree = "<group>";
 		};
 		77668FB4266413C8007C6F25 /* CoreDataEntities */ = {
@@ -332,10 +324,10 @@
 				77668FCF2665AF61007C6F25 /* ContactTableViewCell.swift in Sources */,
 				77668F6326640CBB007C6F25 /* AppDelegate.swift in Sources */,
 				77668F8C26640F82007C6F25 /* ContactDetailsViewModel.swift in Sources */,
-				77668F9926641081007C6F25 /* EditViewController.swift in Sources */,
 				77668FA1266410FC007C6F25 /* ContactData.swift in Sources */,
 				77668FBE266415E8007C6F25 /* UIColor+CustomUIColors.swift in Sources */,
 				77668F6526640CBB007C6F25 /* SceneDelegate.swift in Sources */,
+				776FC4E02671E8CF00996C37 /* ContactSomeDetailCellView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

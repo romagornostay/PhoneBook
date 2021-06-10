@@ -20,6 +20,7 @@ class ContactDetailTableViewCell: UITableViewCell {
     private let descriptionLabel: UILabel = {
         var label = UILabel()
         label.font = .base2
+        label.text = " "
         return label
     }()
     
@@ -33,7 +34,7 @@ class ContactDetailTableViewCell: UITableViewCell {
        
     }
     
-    func configure(title: String, description: String, textColor: UIColor) {
+    func configure(title: String?, description: String?, textColor: UIColor) {
         titleLabel.text = title
         descriptionLabel.text = description
         descriptionLabel.textColor = textColor
