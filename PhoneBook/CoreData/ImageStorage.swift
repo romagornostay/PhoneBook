@@ -8,17 +8,14 @@
 import UIKit
 
 final class ImageStorage {
-    
     private let fileManager: FileManager
     private let path: String
     
     init(name: String, fileManager: FileManager = FileManager.default) throws {
         self.fileManager = fileManager
-
         let url = try fileManager.url(for: .cachesDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
         let path = url.appendingPathComponent(name, isDirectory: true).path
         self.path = path
-        
         try createDirectory()
         try setDirectoryAttributes([.protectionKey: FileProtectionType.complete])
     }
@@ -38,7 +35,6 @@ final class ImageStorage {
 }
 
 private extension ImageStorage {
-
     func setDirectoryAttributes(_ attributes: [FileAttributeKey: Any]) throws {
         try fileManager.setAttributes(attributes, ofItemAtPath: path)
     }
@@ -60,7 +56,6 @@ private extension ImageStorage {
 
 // MARK: - Error
 private extension ImageStorage {
-    
     enum Error: Swift.Error {
         case invalidImage
     }

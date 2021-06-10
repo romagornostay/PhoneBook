@@ -8,8 +8,7 @@
 import UIKit
 
 enum Images {
-    
     static let userImage = UIImage(systemName: "person.crop.circle.fill")
     static let addImage = UIImage(named: "addImage")
-    
+    static let chevronRight = UIImage(systemName: "chevron.right")
 }

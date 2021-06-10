@@ -20,12 +20,12 @@ class ContactViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    private let nameView = ContactSomeDetailCellView()
+    
+    private let firstNameView = ContactSomeDetailCellView()
     private let lastNameView = ContactSomeDetailCellView()
     private let phoneView = ContactSomeDetailCellView()
     private let ringtoneView = ContactSomeDetailCellView()
-    private let notesV = ContactSomeDetailCellView()
-    
+    private let notesView = ContactSomeDetailCellView()
     
     private let ringtonePicker: UIPickerView = {
         let picker = UIPickerView()
@@ -34,10 +34,10 @@ class ContactViewController: UIViewController {
     }()
     
     private let imagePicker = UIImagePickerController()
-    
-    private let chosenImage = UIImageView()
-    
-    
+    private let chosenImageFromPicker = UIImageView()
+    private let disclosure = UIImageView(image: Images.chevronRight)
+    private let scrollView = UIScrollView()
+    private let containerView = UIView()
     
     private let avatarView: UIImageView = {
         let image = UIImageView()
@@ -63,12 +63,12 @@ class ContactViewController: UIViewController {
     }()
     
     private lazy var newContact: ContactData = {
-        let name = nameView.textField.text
+        let name = firstNameView.textField.text
         let lastName = lastNameView.textField.text ?? ""
         let phone = phoneView.textField.text
         let ringtone = ringtoneView.textField.text
-        let notes = notesV.textField.text
-        let contact = ContactData(id: nil, firstName: name, lastName: lastName, phone: phone, ringtone: ringtone, notes: notes, avatar: chosenImage.image)
+        let notes = notesView.textField.text
+        let contact = ContactData(id: nil, firstName: name, lastName: lastName, phone: phone, ringtone: ringtone, notes: notes, avatar: chosenImageFromPicker.image)
         return contact
     }()
     
@@ -76,6 +76,10 @@ class ContactViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        view.backgroundColor = .white
+        
+        setupScrollView()
+
         setupNavigationItems()
         
         setupContactImage()
@@ -94,66 +98,85 @@ class ContactViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        doneButton.isEnabled = nameView.textField.text == nil
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.isTranslucent = true
+        
+        doneButton.isEnabled = firstNameView.textField.text == nil
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        //navigation bar back to default
+        navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
+        navigationController?.navigationBar.shadowImage = nil
+    }
+    
+    private func setupScrollView() {
+        view.addSubview(scrollView)
+        scrollView.addSubview(containerView)
+        scrollView.frame = view.bounds
+        let contentViewSize = CGSize(width: view.frame.width, height: view.frame.height)
+        scrollView.contentSize = contentViewSize
+        containerView.frame.size = contentViewSize
     }
     
     private func setupContactImage() {
-        view.backgroundColor = .white
-        view.addSubview(avatarView)
+        containerView.addSubview(avatarView)
         avatarView.isUserInteractionEnabled = true
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped))
         avatarView.addGestureRecognizer(tapRecognizer)
         
-        avatarView.center = view.center
+        //avatarView.center = view.center
         avatarView.snp.makeConstraints { make in
             make.topMargin.equalTo(16)
             make.leading.equalTo(16)
             make.width.height.equalTo(90)
         }
         
-        view.addSubview(addPhotoButton)
+        containerView.addSubview(addPhotoButton)
         addPhotoButton.snp.makeConstraints { make in
-            make.top.equalTo(avatarView.snp.bottom)//.inset(8)
-            make.leading.equalTo(25)
+            make.top.equalTo(avatarView.snp.bottom)
+            make.centerX.equalTo(avatarView.snp.centerX)
         }
         addPhotoButton.addTarget(self, action: #selector(imageTapped), for: .touchUpInside)
     }
     
     private func setupFirstNameView() {
-        view.addSubview(nameView)
-        nameView.textField.placeholder = LocalizationConstants.AddContact.firstName
-        nameView.textField.becomeFirstResponder()
+        containerView.addSubview(firstNameView)
+        firstNameView.textField.placeholder = LocalizationConstants.AddContact.firstName
+        firstNameView.textField.becomeFirstResponder()
 
-        nameView.snp.makeConstraints { make in
-            make.topMargin.equalTo(15)
+        firstNameView.snp.makeConstraints { make in
+            make.topMargin.equalTo(10)
             make.leading.equalTo(avatarView.snp.trailing).offset(16)
             make.trailing.equalToSuperview()
         }
     }
     private func setupLastNameView() {
-        view.addSubview(lastNameView)
+        containerView.addSubview(lastNameView)
         lastNameView.textField.placeholder = LocalizationConstants.AddContact.lastName
 
         lastNameView.snp.makeConstraints { make in
-            make.top.equalTo(nameView.snp.bottom).offset(15)
-            make.leading.trailing.equalTo(nameView)
+            make.top.equalTo(firstNameView.snp.bottom).offset(10)
+            make.leading.trailing.equalTo(firstNameView)
         }
     }
 
     private func setupPhoneNumberView() {
-        view.addSubview(phoneView)
+        containerView.addSubview(phoneView)
         phoneView.textField.placeholder = LocalizationConstants.AddContact.mobilePhone
         phoneView.textField.keyboardType = .phonePad
 
         phoneView.snp.makeConstraints { make in
-            make.top.equalTo(lastNameView.snp.bottom).offset(40)
+            make.top.equalTo(lastNameView.snp.bottom).offset(30)
             make.leading.equalTo(20)
             make.trailing.equalToSuperview()
         }
     }
     
     private func setupRingtoneView() {
-        view.addSubview(ringtoneView)
+        containerView.addSubview(ringtoneView)
         ringtoneView.titleLabel.text = LocalizationConstants.AddContact.ringtone
         ringtoneView.textField.placeholder = LocalizationConstants.AddContact.defaultRingtone
 
@@ -161,26 +184,30 @@ class ContactViewController: UIViewController {
             make.top.equalTo(phoneView.snp.bottom).offset(15)
             make.leading.trailing.equalTo(phoneView)
         }
+        containerView.addSubview(disclosure)
+        disclosure.tintColor = .base1
+        disclosure.snp.makeConstraints { make in
+            make.centerY.equalTo(ringtoneView.snp.centerY)
+            make.trailing.equalToSuperview().inset(16)
+        }
     }
     
     private func setupNotesView() {
-        view.addSubview(notesV)
-        notesV.titleLabel.text = LocalizationConstants.AddContact.notes
-        notesV.textField.returnKeyType = .done
+        containerView.addSubview(notesView)
+        notesView.titleLabel.text = LocalizationConstants.AddContact.notes
+        notesView.textField.returnKeyType = .done
 
-        notesV.snp.makeConstraints { (make) in
+        notesView.snp.makeConstraints { (make) in
             make.top.equalTo(ringtoneView.snp.bottom).offset(15)
             make.leading.trailing.equalTo(ringtoneView)
         }
     }
     
-
-    
     private func setupDeleteButton() {
         guard viewModel.contact != nil else { return }
-        view.addSubview(deleteButton)
+        containerView.addSubview(deleteButton)
         deleteButton.snp.makeConstraints { (make) in
-            make.top.equalTo(notesV.snp.bottom).offset(10)
+            make.top.equalTo(notesView.snp.bottom).offset(10)
             make.centerX.equalToSuperview()
             
         }
@@ -194,11 +221,11 @@ class ContactViewController: UIViewController {
     
     private func setupContactData() {
         if let currentContact = viewModel.contact {
-            nameView.textField.text = currentContact.firstName
+            firstNameView.textField.text = currentContact.firstName
             lastNameView.textField.text =  currentContact.lastName
             phoneView.textField.text = currentContact.phone
             ringtoneView.textField.text = currentContact.ringtone
-            notesV.textField.text = currentContact.notes
+            notesView.textField.text = currentContact.notes
             if let contactImage = currentContact.avatar {
                 avatarView.image = contactImage
             } else {
@@ -220,12 +247,12 @@ class ContactViewController: UIViewController {
     @objc
     private func doneTapped() {
         if var currentContact = viewModel.contact {
-            currentContact.firstName = nameView.textField.text
+            currentContact.firstName = firstNameView.textField.text
             currentContact.lastName = lastNameView.textField.text ?? " "
             currentContact.phone = phoneView.textField.text
             currentContact.ringtone = ringtoneView.textField.text
-            currentContact.notes = notesV.textField.text
-            currentContact.avatar = chosenImage.image
+            currentContact.notes = notesView.textField.text
+            currentContact.avatar = chosenImageFromPicker.image
             viewModel.updateContact(currentContact)
         } else {
             viewModel.addContact(newContact)
@@ -238,15 +265,15 @@ class ContactViewController: UIViewController {
     }
     
     private func setupTextFields() {
-        nameView.textField.delegate = self
+        firstNameView.textField.delegate = self
         lastNameView.textField.delegate = self
         phoneView.textField.delegate = self
         ringtoneView.textField.delegate = self
-        notesV.textField.delegate = self
-        addInputAccessoryForTextFields([phoneView.textField, ringtoneView.textField, notesV.textField])
+        notesView.textField.delegate = self
+        addInputAccessoryForTextFields([phoneView.textField, ringtoneView.textField, notesView.textField])
     }
     
-    func addInputAccessoryForTextFields(_ textFields: [UITextField]) {
+    private func addInputAccessoryForTextFields(_ textFields: [UITextField]) {
         for (index, textField) in textFields.enumerated() {
             let toolbar: UIToolbar = UIToolbar()
             toolbar.sizeToFit()
@@ -273,7 +300,6 @@ class ContactViewController: UIViewController {
         }
     }
     
-    
     private func setupRingtonePicker() {
         ringtonePicker.delegate = self
         ringtonePicker.dataSource = self
@@ -293,11 +319,11 @@ class ContactViewController: UIViewController {
     
     @objc
     private func imageTapped(sender: UIImageView) {
-        let alert = UIAlertController(title: "Choose Image", message: nil, preferredStyle: .actionSheet)
-        alert.addAction(UIAlertAction(title: "Camera", style: .default, handler: { _ in
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: "Take photo", style: .default, handler: { _ in
             self.openCamera()
         }))
-        alert.addAction(UIAlertAction(title: "Gallery", style: .default, handler: { _ in
+        alert.addAction(UIAlertAction(title: "Choose photo", style: .default, handler: { _ in
             self.openPhotos()
         }))
         alert.addAction(UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil))
@@ -340,7 +366,7 @@ extension ContactViewController: UITextFieldDelegate {
             textField.text = viewModel.formatNumber(phoneNumber: fullString, shouldRemoveLastDigit: range.length == 1)
             return false
         }
-        if textField == nameView.textField {
+        if textField == firstNameView.textField {
            let nameLength = (textField.text?.count ?? 0) - range.length + string.count
             doneButton.isEnabled = nameLength > 0
         }
@@ -350,16 +376,16 @@ extension ContactViewController: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         switch textField {
-        case nameView.textField:
+        case firstNameView.textField:
             lastNameView.textField.becomeFirstResponder()
         case lastNameView.textField:
             phoneView.textField.becomeFirstResponder()
         case phoneView.textField:
             ringtoneView.textField.becomeFirstResponder()
         case ringtoneView.textField:
-            notesV.textField.becomeFirstResponder()
-        case notesV.textField:
-            notesV.textField.resignFirstResponder()
+            notesView.textField.becomeFirstResponder()
+        case notesView.textField:
+            notesView.textField.resignFirstResponder()
         default:
             textField.resignFirstResponder()
         }
@@ -380,7 +406,6 @@ extension ContactViewController: UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         1
     }
-    
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         Constants.ringtones.count
     }
@@ -390,11 +415,10 @@ extension ContactViewController: UIPickerViewDataSource {
 extension ContactViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let pickedImage = info[.originalImage] as? UIImage {
-            chosenImage.image = pickedImage
-            avatarView.image = chosenImage.image
+            chosenImageFromPicker.image = pickedImage
+            avatarView.image = chosenImageFromPicker.image
             avatarView.layer.masksToBounds = true
         }
         picker.dismiss(animated: true, completion: nil)
     }
-    
 }

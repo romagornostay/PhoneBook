@@ -20,7 +20,6 @@
 		77668F7E26640EB9007C6F25 /* ContactListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77668F7D26640EB9007C6F25 /* ContactListViewController.swift */; };
 		77668F8126640EF0007C6F25 /* ContactListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77668F8026640EF0007C6F25 /* ContactListViewModel.swift */; };
 		77668F8526640F38007C6F25 /* ContactDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77668F8426640F38007C6F25 /* ContactDetailsViewController.swift */; };
-		77668F8926640F5C007C6F25 /* ContactDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77668F8826640F5C007C6F25 /* ContactDetailView.swift */; };
 		77668F8C26640F82007C6F25 /* ContactDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77668F8B26640F82007C6F25 /* ContactDetailsViewModel.swift */; };
 		77668F9126640FE9007C6F25 /* ContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77668F9026640FE9007C6F25 /* ContactViewController.swift */; };
 		77668F9526641036007C6F25 /* ContactViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77668F9426641036007C6F25 /* ContactViewModel.swift */; };
@@ -59,7 +58,6 @@
 		77668F7D26640EB9007C6F25 /* ContactListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactListViewController.swift; sourceTree = "<group>"; };
 		77668F8026640EF0007C6F25 /* ContactListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactListViewModel.swift; sourceTree = "<group>"; };
 		77668F8426640F38007C6F25 /* ContactDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactDetailsViewController.swift; sourceTree = "<group>"; };
-		77668F8826640F5C007C6F25 /* ContactDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactDetailView.swift; sourceTree = "<group>"; };
 		77668F8B26640F82007C6F25 /* ContactDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactDetailsViewModel.swift; sourceTree = "<group>"; };
 		77668F9026640FE9007C6F25 /* ContactViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactViewController.swift; sourceTree = "<group>"; };
 		77668F9426641036007C6F25 /* ContactViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactViewModel.swift; sourceTree = "<group>"; };
@@ -150,7 +148,6 @@
 				7723CFBB266E20D9002DD09A /* ContactDetailsCoordinator.swift */,
 				77668F8426640F38007C6F25 /* ContactDetailsViewController.swift */,
 				77668FE026675D9D007C6F25 /* StretchyTableHeaderView.swift */,
-				77668F8826640F5C007C6F25 /* ContactDetailView.swift */,
 				77668FFA2667FD88007C6F25 /* ContactDetailTableViewCell.swift */,
 				77668F8B26640F82007C6F25 /* ContactDetailsViewModel.swift */,
 			);
@@ -311,7 +308,6 @@
 				77668FAC2664123C007C6F25 /* ContactContainer.xcdatamodeld in Sources */,
 				77668FFB2667FD89007C6F25 /* ContactDetailTableViewCell.swift in Sources */,
 				77668F8126640EF0007C6F25 /* ContactListViewModel.swift in Sources */,
-				77668F8926640F5C007C6F25 /* ContactDetailView.swift in Sources */,
 				7723CFBC266E20D9002DD09A /* ContactDetailsCoordinator.swift in Sources */,
 				77668F9126640FE9007C6F25 /* ContactViewController.swift in Sources */,
 				77668F8526640F38007C6F25 /* ContactDetailsViewController.swift in Sources */,

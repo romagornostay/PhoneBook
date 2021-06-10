@@ -26,8 +26,7 @@ final class CoreDataManager {
         fetchUsers()
     }
     
-    
-    func fetchUsers () {
+    func fetchUsers() {
         let request = NSFetchRequest<ContactEntity>(entityName: "ContactEntity")
         do {
             savedEntities =  try container.viewContext.fetch(request)
@@ -65,18 +64,6 @@ final class CoreDataManager {
         newUser.notes = contact.notes
         saveContext()
     }
-    
-//    func convertEntityToContact(by entity: ContactEntity) -> ContactData {
-//        entity.storage = imageStorage
-//        let contact = ContactData(id: entity.id,
-//                                  firstName: entity.firstName!,
-//                                  lastName: entity.lastName!,
-//                                  phone: entity.phone!,
-//                                  ringtone: entity.ringtone!,
-//                                  notes: entity.notes!,
-//                                  avatar: entity.image)
-//        return contact
-//    }
     
     func updateEntity(with contact: ContactData) {
         for entity in savedEntities {

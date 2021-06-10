@@ -41,9 +41,7 @@ class ContactTableViewCell: UITableViewCell {
     private func setupLayout() {
         addSubview(firstNameLabel)
         firstNameLabel.snp.makeConstraints { make in
-            make.leading.equalTo(16)
-            make.top.equalTo(16)
-            make.bottom.equalTo(-16)
+            make.leading.top.bottom.equalToSuperview().inset(16)
         }
         addSubview(lastNameLabel)
         lastNameLabel.snp.makeConstraints { make in
@@ -51,5 +49,4 @@ class ContactTableViewCell: UITableViewCell {
             make.top.bottom.equalToSuperview()
         }
     }
-    
 }

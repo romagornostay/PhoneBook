@@ -71,7 +71,6 @@ final class ContactListViewModel {
     }
     
     func createModels() {
-        //let arrayOfFirstLetter = manager.savedContacts.map {$0.lastName.first}
         let set = Set(manager.savedContacts.map {$0.lastName.first})
         models = set.map { letter -> ContactsModel in
             var character = ""
@@ -84,7 +83,6 @@ final class ContactListViewModel {
         }
         contactsSectionTitles = [String](models.compactMap { $0.character })
         contactsSectionTitles = contactsSectionTitles.sorted(by: { $0 < $1 })
-        //print("---1---\(contactsSectionTitles)")
     }
 }
 
