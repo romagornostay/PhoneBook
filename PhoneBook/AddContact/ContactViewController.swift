@@ -77,24 +77,19 @@ class ContactViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .white
-        
         setupScrollView()
-
         setupNavigationItems()
-        
         setupContactImage()
         setupFirstNameView()
         setupLastNameView()
         setupPhoneNumberView()
         setupRingtoneView()
         setupNotesView()
-        
+        setupDeleteButton()
         setupTextFields()
         setupRingtonePicker()
         setupMissKeyboardTapGesture()
         setupContactData()
-        setupDeleteButton()
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -103,6 +98,9 @@ class ContactViewController: UIViewController {
         navigationController?.navigationBar.isTranslucent = true
         
         doneButton.isEnabled = firstNameView.textField.text == nil
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -110,15 +108,18 @@ class ContactViewController: UIViewController {
         //navigation bar back to default
         navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
         navigationController?.navigationBar.shadowImage = nil
+        
+        NotificationCenter.default.removeObserver(self)
+       
     }
     
     private func setupScrollView() {
         view.addSubview(scrollView)
         scrollView.addSubview(containerView)
         scrollView.frame = view.bounds
-        let contentViewSize = CGSize(width: view.frame.width, height: view.frame.height)
-        scrollView.contentSize = contentViewSize
-        containerView.frame.size = contentViewSize
+        //let contentViewSize = CGSize(width: view.frame.width, height: view.frame.height)
+        scrollView.contentSize = view.bounds.size
+        containerView.frame.size = view.bounds.size
     }
     
     private func setupContactImage() {
@@ -127,7 +128,6 @@ class ContactViewController: UIViewController {
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped))
         avatarView.addGestureRecognizer(tapRecognizer)
         
-        //avatarView.center = view.center
         avatarView.snp.makeConstraints { make in
             make.topMargin.equalTo(16)
             make.leading.equalTo(16)
@@ -264,6 +264,24 @@ class ContactViewController: UIViewController {
         navigationController?.popViewControllerToBottom()
     }
     
+    
+    @objc
+    private func keyboardWillShow(notification:NSNotification) {
+        let userInfo = notification.userInfo!
+        var keyboardFrame: CGRect = (userInfo[UIResponder.keyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
+        keyboardFrame = self.view.convert(keyboardFrame, from: nil)
+        var contentInset = scrollView.contentInset
+        contentInset.bottom = keyboardFrame.size.height
+        scrollView.contentInset = contentInset
+    }
+
+    @objc
+    private func keyboardWillHide(notification:NSNotification) {
+        let contentInset = UIEdgeInsets.zero
+        scrollView.contentInset = contentInset
+    }
+    
+    
     private func setupTextFields() {
         firstNameView.textField.delegate = self
         lastNameView.textField.delegate = self
@@ -361,16 +379,22 @@ class ContactViewController: UIViewController {
 //MARK:-- UITextFieldDelegate
 extension ContactViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        var isPhoneHasValue = false
+        var isNameHasValue = false
         if textField == phoneView.textField {
             let fullString = (phoneView.textField.text ?? "") + string
             textField.text = viewModel.formatNumber(phoneNumber: fullString, shouldRemoveLastDigit: range.length == 1)
+            
+            let phoneLength = (textField.text?.count ?? 0) - range.length + string.count
+            isPhoneHasValue = phoneLength > 0
+            doneButton.isEnabled = isPhoneHasValue
             return false
         }
         if textField == firstNameView.textField {
-           let nameLength = (textField.text?.count ?? 0) - range.length + string.count
-            doneButton.isEnabled = nameLength > 0
+            let nameLength = (textField.text?.count ?? 0) - range.length + string.count
+            isNameHasValue = nameLength > 0
+            doneButton.isEnabled = isNameHasValue
         }
-       
         return true
     }
     
