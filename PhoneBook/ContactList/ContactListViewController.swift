@@ -12,7 +12,6 @@ class ContactListViewController: UIViewController {
     
     private let tableView: UITableView = {
         let table = UITableView.init(frame: .zero, style: .plain)
-        //table.separatorStyle = .none
         table.register(ContactTableViewCell.self, forCellReuseIdentifier: ContactTableViewCell.identifier)
         return table
     }()
@@ -24,6 +23,8 @@ class ContactListViewController: UIViewController {
         return searchController
     }()
     
+    private lazy var dataSource : DataSource = DataSource()
+    
     init(viewModel: ContactListViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -33,24 +34,13 @@ class ContactListViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupNavigationItems()
-        setupLayout()
         setupSearchController()
-        
+        setupTableView()
         binding()
         viewModel.createModels()
-        
-        tableView.delegate = self
-        tableView.dataSource = self
-        
-    }
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
     }
     
     private func binding() {
@@ -71,14 +61,17 @@ class ContactListViewController: UIViewController {
         viewModel.addContact()
     }
     
-    private func setupLayout() {
+    private func setupTableView() {
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+        tableView.delegate = self
+        tableView.dataSource = self.dataSource
+        dataSource.viewModel = viewModel
     }
     
-    func setupSearchController() {
+    private func setupSearchController() {
         definesPresentationContext = true
         navigationItem.hidesSearchBarWhenScrolling = false
         navigationItem.searchController = searchController
@@ -90,7 +83,6 @@ class ContactListViewController: UIViewController {
 extension ContactListViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         viewModel.updateSearchResults(for: searchController)
-      
     }
 }
 // MARK: UITableViewDelegate
@@ -101,58 +93,7 @@ extension ContactListViewController: UITableViewDelegate {
         if let contacts = filteredModels.first?.contacts {
             let contact = contacts[indexPath.row]
             viewModel.showContactDetails(for: contact)
-            print("OPEN---1--")
             tableView.deselectRow(at: indexPath, animated: true)
         }
-    }
-}
-// MARK: UITableViewDataSource
-extension ContactListViewController: UITableViewDataSource {
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return viewModel.contactsSectionTitles.count
-    }
-    
-    func sectionIndexTitles(for tableView: UITableView) -> [String]? {
-        return Constants.contactIndexTitles
-    }
-    
-    func tableView(_ tableView: UITableView, sectionForSectionIndexTitle title: String, at index: Int) -> Int {
-        guard let index = viewModel.contactsSectionTitles.firstIndex(of: title) else { return -1 }
-        return index
-    }
-    
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return viewModel.contactsSectionTitles[section]
-    }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 28
-    }
-    
-    
-    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-        let headerView = view as! UITableViewHeaderFooterView
-        headerView.textLabel?.textColor = .black
-        headerView.textLabel?.font = .base4
-    }
-    
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let character = viewModel.contactsSectionTitles[section]
-        let filteredModels = viewModel.models.filter {$0.character == character}
-        guard let contacts = filteredModels.first?.contacts else { return 0 }
-        
-        return contacts.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: ContactTableViewCell.identifier, for: indexPath) as! ContactTableViewCell
-        let character = viewModel.contactsSectionTitles[indexPath.section]
-        let filteredModels = viewModel.models.filter {$0.character == character}
-        if let contacts = filteredModels.first?.contacts {
-            let contact = contacts[indexPath.row]
-            cell.set(contact.firstName, contact.lastName)
-        }
-        return cell
     }
 }

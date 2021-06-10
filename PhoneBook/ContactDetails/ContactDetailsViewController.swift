@@ -8,9 +8,7 @@
 import UIKit
 
 class ContactDetailsViewController: UIViewController {
-    
     private let viewModel: ContactDetailsViewModel
-    
     
     init(viewModel: ContactDetailsViewModel) {
         self.viewModel = viewModel
@@ -23,13 +21,9 @@ class ContactDetailsViewController: UIViewController {
     
     private let tableView: UITableView = {
         let table = UITableView.init(frame: .zero, style: .grouped)
-        //table.separatorStyle = .none
         table.register(ContactDetailTableViewCell.self, forCellReuseIdentifier: ContactDetailTableViewCell.identifier)
         return table
     }()
-    
-    
-       
     
     private let nameLabel: UILabel = {
         let label = UILabel()
@@ -54,7 +48,7 @@ class ContactDetailsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        view.backgroundColor = .white
         setupTableView()
     }
     
@@ -65,8 +59,6 @@ class ContactDetailsViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-
-        // Restore the navigation bar to default
         navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
         navigationController?.navigationBar.shadowImage = nil
     }
@@ -79,20 +71,17 @@ class ContactDetailsViewController: UIViewController {
                                                                height: view.frame.size.width/3))
         let contact = viewModel.contact
         headerView.configure(name: contact.firstName, lastName: contact.lastName, avatar: contact.avatar)
-        print(view.bounds.width)
+        //print(view.bounds.width)
         tableView.tableHeaderView = headerView
         tableView.delegate = self
         tableView.dataSource = self
     }
-    
-   
     
     private func setupNavigationItems() {
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         navigationController?.navigationBar.shadowImage = UIImage()
         navigationController?.navigationBar.isTranslucent = true
         
-        view.backgroundColor = .white
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editTapped))
     }
     
@@ -104,9 +93,7 @@ class ContactDetailsViewController: UIViewController {
 }
 
 extension ContactDetailsViewController: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        3
-    }
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { return 3 }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ContactDetailTableViewCell.identifier, for: indexPath) as! ContactDetailTableViewCell

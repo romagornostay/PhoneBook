@@ -22,7 +22,7 @@ class ContactSomeDetailCellView: UIView {
         return textField
     }()
     
-    private let divider1 = UILabel()
+    private let divider = UILabel()
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -38,16 +38,15 @@ class ContactSomeDetailCellView: UIView {
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(10)
             make.leading.equalToSuperview()
-            
         }
         addSubview(textField)
         textField.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(2)
             make.leading.equalTo(titleLabel)
         }
-        addSubview(divider1)
-        divider1.layer.backgroundColor = UIColor.base1.cgColor
-        divider1.snp.makeConstraints { make in
+        addSubview(divider)
+        divider.layer.backgroundColor = UIColor.base1.cgColor
+        divider.snp.makeConstraints { make in
             make.top.equalTo(textField.snp.bottom).offset(9)
             make.leading.trailing.equalToSuperview()
             make.height.equalTo(1)

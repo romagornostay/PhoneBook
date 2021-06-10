@@ -9,11 +9,13 @@ import Foundation
 
 protocol CreateContactViewModelDelegate: AnyObject {
     func contactViewModelDidRequestAddNewContact(_ contact: ContactData)
+    func contactViewModelDidRequestCancelCreateNewContact()
 }
 
 protocol UpdateContactViewModelDelegate: AnyObject {
     func contactViewModelDidRequestUpdateContact(_ contact: ContactData)
-    func contactsViewModelDidRequestDeleteContact(_ contact: ContactData)
+    func contactViewModelDidRequestDeleteContact(_ contact: ContactData)
+    func contactViewModelDidRequestCancelUpdateContact()
 }
 
 final class ContactViewModel {
@@ -36,7 +38,15 @@ final class ContactViewModel {
     
     func deleteContact() {
         guard let contact = contact else { return }
-        updateDelegate?.contactsViewModelDidRequestDeleteContact(contact)
+        updateDelegate?.contactViewModelDidRequestDeleteContact(contact)
+    }
+    
+    func cancelContact() {
+        if contact != nil {
+            updateDelegate?.contactViewModelDidRequestCancelUpdateContact()
+        } else {
+            createDelegate?.contactViewModelDidRequestCancelCreateNewContact()
+        }
     }
     
     func formatNumber(phoneNumber: String, shouldRemoveLastDigit: Bool) -> String {

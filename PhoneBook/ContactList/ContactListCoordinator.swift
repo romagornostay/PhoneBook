@@ -7,7 +7,6 @@
 
 import UIKit
 
-
 final class ContactListCoordinator: Coordinator {
     private let presenter: UINavigationController
     private var coordinator: ContactDetailsCoordinator?
@@ -44,6 +43,10 @@ extension ContactListCoordinator: ContactListViewModelDelegate {
 }
 // MARK: CreateContactViewModelDelegate
 extension ContactListCoordinator: CreateContactViewModelDelegate {
+    func contactViewModelDidRequestCancelCreateNewContact() {
+        presenter.popViewControllerToBottom()
+    }
+    
     func contactViewModelDidRequestAddNewContact(_ contact: ContactData) {
         contactListViewModel?.addContact(contact)
         presenter.popViewControllerToBottom()

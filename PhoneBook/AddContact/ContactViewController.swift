@@ -93,6 +93,7 @@ class ContactViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        //clear navigation bar
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         navigationController?.navigationBar.shadowImage = UIImage()
         navigationController?.navigationBar.isTranslucent = true
@@ -117,7 +118,6 @@ class ContactViewController: UIViewController {
         view.addSubview(scrollView)
         scrollView.addSubview(containerView)
         scrollView.frame = view.bounds
-        //let contentViewSize = CGSize(width: view.frame.width, height: view.frame.height)
         scrollView.contentSize = view.bounds.size
         containerView.frame.size = view.bounds.size
     }
@@ -209,10 +209,10 @@ class ContactViewController: UIViewController {
         deleteButton.snp.makeConstraints { (make) in
             make.top.equalTo(notesView.snp.bottom).offset(10)
             make.centerX.equalToSuperview()
-            
         }
         deleteButton.addTarget(self, action: #selector(deleteTapped), for: .touchUpInside)
     }
+    
     @objc
     private func deleteTapped() {
         viewModel.deleteContact()
@@ -241,7 +241,6 @@ class ContactViewController: UIViewController {
         doneButton.action = #selector(doneTapped)
         navigationItem.rightBarButtonItem = doneButton
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelTapped))
-        
     }
     
     @objc
@@ -261,7 +260,7 @@ class ContactViewController: UIViewController {
     
     @objc
     private func cancelTapped() {
-        navigationController?.popViewControllerToBottom()
+        viewModel.cancelContact()
     }
     
     
@@ -333,7 +332,6 @@ class ContactViewController: UIViewController {
     private func missTapped() {
         view.endEditing(true)
     }
-    
     
     @objc
     private func imageTapped(sender: UIImageView) {

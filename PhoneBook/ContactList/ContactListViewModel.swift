@@ -21,11 +21,7 @@ final class ContactListViewModel {
     var onDidUpdateData: (() -> Void)?
     
     func updateSearchResults(for searchController: UISearchController) {
-        //print("----SEARCHING...---")
         guard let text = searchController.searchBar.text else { return }
-       //MARK: --TODO!
-        searchController.obscuresBackgroundDuringPresentation = text.isEmpty
-        
         var filteredContacts = [ContactData]()
         filteredContacts = manager.savedContacts.filter({text.isEmpty ? true : "\($0)".lowercased().contains(text.lowercased())})
         filteredContacts = filteredContacts.sorted(by: { $0.lastName < $1.lastName })

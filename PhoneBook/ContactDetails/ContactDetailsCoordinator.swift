@@ -7,14 +7,11 @@
 
 import UIKit
 
-
-
 final class ContactDetailsCoordinator: Coordinator {
     private let presenter: UINavigationController
     private var contact: ContactData
     private weak var contactListViewModel: ContactListViewModel?
   
-
     init(presenter: UINavigationController, contact: ContactData, viewModel: ContactListViewModel?) {
         self.presenter = presenter
         self.contact = contact
@@ -37,12 +34,16 @@ extension ContactDetailsCoordinator: ContactDetailsViewModelDelegate {
         viewModel.updateDelegate = self
         let viewController = ContactViewController(viewModel: viewModel)
         viewController.navigationItem.largeTitleDisplayMode = .never
-        presenter.pushViewController(viewController, animated: false)
+        presenter.pushViewController(viewController, animated: true)
     }
 }
 
-
+// MARK: UpdateContactViewModelDelegate
 extension ContactDetailsCoordinator: UpdateContactViewModelDelegate {
+    func contactViewModelDidRequestCancelUpdateContact() {
+        presenter.popToRootViewController(animated: true)
+    }
+    
     func contactViewModelDidRequestUpdateContact(_ contact: ContactData) {
         if let viewModel = contactListViewModel {
             viewModel.updateContact(contact)
@@ -50,7 +51,7 @@ extension ContactDetailsCoordinator: UpdateContactViewModelDelegate {
         }
     }
     
-    func contactsViewModelDidRequestDeleteContact(_ contact: ContactData) {
+    func contactViewModelDidRequestDeleteContact(_ contact: ContactData) {
         if let viewModel = contactListViewModel {
             viewModel.deleteContact(contact)
             presenter.popToRootViewController(animated: true)

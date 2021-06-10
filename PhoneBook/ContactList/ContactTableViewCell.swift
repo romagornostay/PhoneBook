@@ -9,7 +9,6 @@ import UIKit
 import SnapKit
 
 class ContactTableViewCell: UITableViewCell {
-    
     static var identifier = String(describing: ContactTableViewCell.self)
     
     private let firstNameLabel: UILabel = {
@@ -25,7 +24,6 @@ class ContactTableViewCell: UITableViewCell {
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
         setupLayout()
     }
     
