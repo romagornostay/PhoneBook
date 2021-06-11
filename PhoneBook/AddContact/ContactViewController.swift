@@ -52,13 +52,13 @@ class ContactViewController: UIViewController {
     
     private let addPhotoButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle(LocalizationConstants.AddContact.addPhotoButton, for: .normal)
+        button.setTitle(LocalizationConstants.Contact.addPhotoButton, for: .normal)
         return button
     }()
     
     private let deleteButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle(LocalizationConstants.EditContact.deleteButton, for: .normal)
+        button.setTitle(LocalizationConstants.Contact.deleteButton, for: .normal)
         return button
     }()
     
@@ -144,7 +144,7 @@ class ContactViewController: UIViewController {
     
     private func setupFirstNameView() {
         containerView.addSubview(firstNameView)
-        firstNameView.textField.placeholder = LocalizationConstants.AddContact.firstName
+        firstNameView.textField.placeholder = LocalizationConstants.Contact.firstName
         firstNameView.textField.becomeFirstResponder()
 
         firstNameView.snp.makeConstraints { make in
@@ -155,7 +155,7 @@ class ContactViewController: UIViewController {
     }
     private func setupLastNameView() {
         containerView.addSubview(lastNameView)
-        lastNameView.textField.placeholder = LocalizationConstants.AddContact.lastName
+        lastNameView.textField.placeholder = LocalizationConstants.Contact.lastName
 
         lastNameView.snp.makeConstraints { make in
             make.top.equalTo(firstNameView.snp.bottom).offset(10)
@@ -165,7 +165,7 @@ class ContactViewController: UIViewController {
 
     private func setupPhoneNumberView() {
         containerView.addSubview(phoneView)
-        phoneView.textField.placeholder = LocalizationConstants.AddContact.mobilePhone
+        phoneView.textField.placeholder = LocalizationConstants.Contact.mobilePhone
         phoneView.textField.keyboardType = .phonePad
 
         phoneView.snp.makeConstraints { make in
@@ -177,8 +177,8 @@ class ContactViewController: UIViewController {
     
     private func setupRingtoneView() {
         containerView.addSubview(ringtoneView)
-        ringtoneView.titleLabel.text = LocalizationConstants.AddContact.ringtone
-        ringtoneView.textField.placeholder = LocalizationConstants.AddContact.defaultRingtone
+        ringtoneView.titleLabel.text = LocalizationConstants.Contact.ringtone
+        ringtoneView.textField.placeholder = LocalizationConstants.Contact.defaultRingtone
 
         ringtoneView.snp.makeConstraints { make in
             make.top.equalTo(phoneView.snp.bottom).offset(15)
@@ -194,7 +194,7 @@ class ContactViewController: UIViewController {
     
     private func setupNotesView() {
         containerView.addSubview(notesView)
-        notesView.titleLabel.text = LocalizationConstants.AddContact.notes
+        notesView.titleLabel.text = LocalizationConstants.Contact.notes
         notesView.textField.returnKeyType = .done
 
         notesView.snp.makeConstraints { (make) in
@@ -296,7 +296,7 @@ class ContactViewController: UIViewController {
             toolbar.sizeToFit()
             
             var items = [UIBarButtonItem]()
-            let nextButton = UIBarButtonItem(title: LocalizationConstants.AddContact.nextButton, style: .plain, target: nil, action: nil)
+            let nextButton = UIBarButtonItem(title: LocalizationConstants.Contact.nextButton, style: .plain, target: nil, action: nil)
             if textField == textFields.last {
                 nextButton.isEnabled = false
             } else {
@@ -306,7 +306,7 @@ class ContactViewController: UIViewController {
             items.append(contentsOf: [nextButton])
             
             let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-            let doneButton = UIBarButtonItem(title: LocalizationConstants.AddContact.doneButton, style: .plain, target: view, action: #selector(UIView.endEditing))
+            let doneButton = UIBarButtonItem(title: LocalizationConstants.Contact.doneButton, style: .plain, target: view, action: #selector(UIView.endEditing))
             items.append(contentsOf: [spacer, doneButton])
             toolbar.setItems(items, animated: false)
             if textField == textFields.last {
@@ -336,13 +336,13 @@ class ContactViewController: UIViewController {
     @objc
     private func imageTapped(sender: UIImageView) {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        alert.addAction(UIAlertAction(title: "Take photo", style: .default, handler: { _ in
+        alert.addAction(UIAlertAction(title: LocalizationConstants.Contact.takePhoto, style: .default, handler: { _ in
             self.openCamera()
         }))
-        alert.addAction(UIAlertAction(title: "Choose photo", style: .default, handler: { _ in
+        alert.addAction(UIAlertAction(title: LocalizationConstants.Contact.choosePhoto, style: .default, handler: { _ in
             self.openPhotos()
         }))
-        alert.addAction(UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction.init(title: LocalizationConstants.Contact.cancelAction, style: .cancel, handler: nil))
         
         self.present(alert, animated: true, completion: nil)
     }
@@ -354,8 +354,8 @@ class ContactViewController: UIViewController {
             imagePicker.allowsEditing = false
             self.present(imagePicker, animated: true, completion: nil)
         } else {
-            let alert  = UIAlertController(title: "Warning", message: "You don't have camera", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            let alert  = UIAlertController(title: LocalizationConstants.Contact.warningAlert, message: LocalizationConstants.Contact.noCamera, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: LocalizationConstants.Contact.okAction, style: .default, handler: nil))
             self.present(alert, animated: true, completion: nil)
         }
     }
@@ -367,8 +367,8 @@ class ContactViewController: UIViewController {
             imagePicker.sourceType = UIImagePickerController.SourceType.photoLibrary
             self.present(imagePicker, animated: true, completion: nil)
         } else {
-            let alert  = UIAlertController(title: "Warning", message: "You don't have permission to access gallery.", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            let alert  = UIAlertController(title:LocalizationConstants.Contact.warningAlert, message: LocalizationConstants.Contact.noPermission, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: LocalizationConstants.Contact.okAction, style: .default, handler: nil))
             self.present(alert, animated: true, completion: nil)
         }
     }

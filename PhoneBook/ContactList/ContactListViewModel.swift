@@ -73,10 +73,12 @@ final class ContactListViewModel {
             if let char = letter {
                 character = String(describing: char)
             }
-            let contacts = manager.savedContacts.filter {$0.lastName.first == letter}
+            var contacts = manager.savedContacts.filter {$0.lastName.first == letter}
+            contacts = contacts.sorted(by: { $0 < $1 })
             let model = ContactsModel(character: character, contacts: contacts)
             return model
         }
+        
         contactsSectionTitles = [String](models.compactMap { $0.character })
         contactsSectionTitles = contactsSectionTitles.sorted(by: { $0 < $1 })
     }

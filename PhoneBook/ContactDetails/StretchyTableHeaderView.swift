@@ -9,15 +9,6 @@ import UIKit
 import SnapKit
 
 final class StretchyTableHeaderView: UIView {
-
-//    let avatarView: UIImageView = {
-//        let image = UIImageView()
-//        image.clipsToBounds = true
-//        image.contentMode = .scaleAspectFit
-//        //image.layer.cornerRadius = 45
-//        //image.layer.masksToBounds = true
-//        return image
-//    }()
     lazy var image: UIImageView = {
         let image = UIImageView()
         image.image = Images.userImage
@@ -49,7 +40,6 @@ final class StretchyTableHeaderView: UIView {
         return view
     }()
     
-    
     func configure(name: String?, lastName: String?, avatar: UIImage?) {
         nameLabel.text = (name ?? "") + " " + (lastName ?? "")
         if let contactImage = avatar {
@@ -58,7 +48,6 @@ final class StretchyTableHeaderView: UIView {
             image.image = Images.userImage
         }
     }
-    
     
     private var avatarViewHeight = NSLayoutConstraint()
     private var avatarViewBottom = NSLayoutConstraint()
@@ -74,19 +63,14 @@ final class StretchyTableHeaderView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
-    
     private func setupLayout() {
         addSubview(containerView)
         containerView.addSubview(avatarView)
         avatarView.addSubview(image)
-//        image.layer.cornerRadius = 43.33
-//        image.layer.masksToBounds = true
         image.snp.makeConstraints { make in
             make.centerY.equalTo(avatarView.snp.centerY)
-            make.size.equalTo(avatarView.snp.height).multipliedBy(0.4)
+            make.size.equalTo(avatarView.snp.height).multipliedBy(0.5)
             make.centerX.equalToSuperview()
-            
         }
         
         containerView.addSubview(nameLabel)
@@ -95,14 +79,12 @@ final class StretchyTableHeaderView: UIView {
             make.centerX.equalToSuperview()
             make.leading.trailing.bottom.equalToSuperview().inset(16)
         }
-       
         
         NSLayoutConstraint.activate([
             widthAnchor.constraint(equalTo: containerView.widthAnchor),
             centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
             heightAnchor.constraint(equalTo: containerView.heightAnchor)
         ])
-        
         
         containerView.translatesAutoresizingMaskIntoConstraints = false
         containerView.widthAnchor.constraint(equalTo: avatarView.widthAnchor).isActive = true
@@ -114,7 +96,6 @@ final class StretchyTableHeaderView: UIView {
         avatarViewHeight.isActive = true
         avatarViewBottom = avatarView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
         avatarViewBottom.isActive = true
-        
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView){
@@ -126,7 +107,5 @@ final class StretchyTableHeaderView: UIView {
         
         image.layer.cornerRadius = image.bounds.height/2
 
-        print(image.bounds.height/2)
-        print(image.frame.size.height/2)
     }
 }

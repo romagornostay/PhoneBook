@@ -71,7 +71,6 @@ class ContactDetailsViewController: UIViewController {
                                                                height: view.frame.size.width/3))
         let contact = viewModel.contact
         headerView.configure(name: contact.firstName, lastName: contact.lastName, avatar: contact.avatar)
-        //print(view.bounds.width)
         tableView.tableHeaderView = headerView
         tableView.delegate = self
         tableView.dataSource = self

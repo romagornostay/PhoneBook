@@ -24,4 +24,11 @@
 "NEXT.BUTTON" = "Next";
 "DONE.BUTTON" = "Done";
 "DELETE.BUTTON" = "Delete Contact";
+"TAKE.PHOTO" = "Take photo";
+"CHOOSE.PHOTO" = "Choose photo";
+"CANCEL.ACTION" = "Cancel";
+"OK.ACTION" = "OK";
+"WARNING.ALERT" = "Warning";
+"NO.CAMERA" = "You don't have camera";
+"NO.PERMISSION" = "You don't have permission to access gallery.";
 

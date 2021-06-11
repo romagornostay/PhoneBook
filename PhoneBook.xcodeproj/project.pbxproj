@@ -110,10 +110,8 @@
 		77668F6126640CBB007C6F25 /* PhoneBook */ = {
 			isa = PBXGroup;
 			children = (
-				77668F6226640CBB007C6F25 /* AppDelegate.swift */,
-				77668F6426640CBB007C6F25 /* SceneDelegate.swift */,
-				77668FD92665BD71007C6F25 /* Localizable.strings */,
-				77668FD42665BD4E007C6F25 /* LocalizationConstants.swift */,
+				776FC4E12672E5B900996C37 /* Support */,
+				776FC4E22672E62700996C37 /* Localization */,
 				77668FDE2665FD82007C6F25 /* Utilities */,
 				77668FCB26658B80007C6F25 /* Extensions */,
 				77668FB4266413C8007C6F25 /* CoreDataEntities */,
@@ -123,8 +121,6 @@
 				77668F8326640F0A007C6F25 /* ContactList */,
 				77668F8E26640FBB007C6F25 /* ContactDetails */,
 				77668F972664104F007C6F25 /* AddContact */,
-				77668F6B26640CBE007C6F25 /* Assets.xcassets */,
-				77668F6D26640CBE007C6F25 /* LaunchScreen.storyboard */,
 				77668F7026640CBE007C6F25 /* Info.plist */,
 			);
 			path = PhoneBook;
@@ -217,6 +213,26 @@
 				77668F7926640DBE007C6F25 /* MainCoordinator.swift */,
 			);
 			path = Coordinator;
+			sourceTree = "<group>";
+		};
+		776FC4E12672E5B900996C37 /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				77668F6226640CBB007C6F25 /* AppDelegate.swift */,
+				77668F6426640CBB007C6F25 /* SceneDelegate.swift */,
+				77668F6B26640CBE007C6F25 /* Assets.xcassets */,
+				77668F6D26640CBE007C6F25 /* LaunchScreen.storyboard */,
+			);
+			path = Support;
+			sourceTree = "<group>";
+		};
+		776FC4E22672E62700996C37 /* Localization */ = {
+			isa = PBXGroup;
+			children = (
+				77668FD92665BD71007C6F25 /* Localizable.strings */,
+				77668FD42665BD4E007C6F25 /* LocalizationConstants.swift */,
+			);
+			path = Localization;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
